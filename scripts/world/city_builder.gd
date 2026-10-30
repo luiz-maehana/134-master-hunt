@@ -12,6 +12,7 @@ const CONCRETE_MATERIAL := preload("res://assets/textures/city/concrete_material
 ## shader no primeiro quadro; lá eles viram cor lisa (o mesmo shader das peças simples).
 const WEB_ASPHALT := Color(0.34, 0.3, 0.28)
 const WEB_CONCRETE := Color(0.47, 0.45, 0.43)
+const WEB_LAWN := Color(0.33, 0.52, 0.25)
 const DEPOSIT_SCENE := preload("res://scenes/world/deposit_point.tscn")
 const KIOSK_SCENE := preload("res://scenes/world/shop_kiosk.tscn")
 const BUILDING_SHADER := preload("res://assets/shaders/building.gdshader")
@@ -170,8 +171,13 @@ func _build_ground() -> void:
 
 ## Piso de cada lote: concreto nos quarteirões comuns, grama na Esplanada, pedra na Praça.
 func _ground_materials() -> Dictionary:
-	var lawn := ShaderMaterial.new()
-	lawn.shader = LAWN_SHADER
+	var lawn: Material
+	if WebPlatform.active():
+		# Na web o gramado listrado (shader próprio, ~3 s de compilação) vira grama lisa.
+		lawn = _flat(WEB_LAWN)
+	else:
+		lawn = ShaderMaterial.new()
+		(lawn as ShaderMaterial).shader = LAWN_SHADER
 	var paved := _concrete.duplicate() as StandardMaterial3D
 	paved.albedo_color = paved.albedo_color * Color(0.92, 0.9, 0.84) if WebPlatform.active() else Color(0.92, 0.9, 0.84)
 	return {&"concrete": _concrete, &"lawn": lawn, &"paved": paved}

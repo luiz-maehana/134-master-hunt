@@ -68,9 +68,32 @@ static func run(city: Node3D, progress: Callable) -> void:
 			(sibling as CanvasLayer).visible = false
 			layers.append(sibling)
 	groups["interface"] = layers
+	# O primeiro objeto compilaria de uma vez as variações com o sol e com a sombra dele (~9 s):
+	# o sol começa apagado e sem sombra, e cada parte volta numa etapa (logo depois do chão).
+	var sun := city.get_node_or_null(^"Sun") as DirectionalLight3D
+	var sun_shadow := sun != null and sun.shadow_enabled
+	if sun != null:
+		sun.visible = false
+		sun.shadow_enabled = false
+		var ordered := {}
+		var first: String = groups.keys()[0]
+		ordered[first] = groups[first]
+		ordered["sol"] = []
+		ordered["sombra do sol"] = []
+		for kind: String in groups:
+			if kind != first:
+				ordered[kind] = groups[kind]
+		groups = ordered
+	StartupLog.mark("gráficos: tudo escondido")
+	await tree.process_frame
+	StartupLog.mark("gráficos: primeiro quadro escondido")
 	var step := 0
 	for kind: String in groups:
-		if kind == "efeitos de tela":
+		if kind == "sol":
+			sun.visible = true
+		elif kind == "sombra do sol":
+			sun.shadow_enabled = sun_shadow
+		elif kind == "efeitos de tela":
 			var effects: Array = groups[kind]
 			environment.glow_enabled = effects[0]
 			environment.fog_enabled = effects[1]
