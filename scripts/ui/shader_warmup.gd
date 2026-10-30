@@ -37,10 +37,31 @@ static func run(city: Node3D, progress: Callable) -> void:
 				if not groups.has(kind):
 					groups[kind] = []
 				(groups[kind] as Array).append(child)
+	# Fora da cidade: o jogador (mão e ferramenta) e os robôs também estreiam numa etapa própria,
+	# e o céu começa como cor lisa (o shader do céu é dos mais caros) e volta numa etapa só dele.
+	for sibling in city.get_parent().get_children():
+		if sibling != city and sibling is Node3D and (sibling as Node3D).visible:
+			(sibling as Node3D).visible = false
+			groups["fora da cidade: %s" % sibling.name] = [sibling]
+	var environment: Environment = null
+	var world_environment := city.get_node_or_null(^"WorldEnvironment") as WorldEnvironment
+	if world_environment != null and world_environment.environment != null:
+		environment = world_environment.environment
+	var background := environment.background_mode if environment != null else Environment.BG_SKY
+	var ambient := environment.ambient_light_source if environment != null else Environment.AMBIENT_SOURCE_SKY
+	if environment != null:
+		environment.background_mode = Environment.BG_COLOR
+		environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+		environment.ambient_light_color = Color(0.6, 0.62, 0.68)
+		environment.background_color = Color(0.55, 0.62, 0.75)
+		groups["céu"] = []
 	var step := 0
 	for kind: String in groups:
 		for node: Node3D in groups[kind]:
 			node.visible = true
+		if kind == "céu":
+			environment.background_mode = background
+			environment.ambient_light_source = ambient
 		for frame in FRAMES_PER_STEP:
 			await tree.process_frame
 		step += 1
