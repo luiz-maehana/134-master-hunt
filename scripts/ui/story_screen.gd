@@ -1,7 +1,7 @@
 class_name StoryScreen
 extends Control
 ## A história do jogo, antes de uma partida nova (tela inicial e "Recomeçar partida"): a animação
-## do ônibus espalhando moedas pela Esplanada (StoryBus) e, embaixo, a história em legendas que
+## do ônibus espalhando moedas pela Esplanada (StoryBus) no topo da janela e, embaixo, a história em legendas que
 ## trocam sozinhas; clique ou Espaço passa para a próxima. Continuar começa a partida
 ## (`accepted`); Voltar ou Esc desistem sem apagar nada (`closed`). Tudo ficção.
 
@@ -13,6 +13,8 @@ const CAPTION_SECONDS := 2.0
 const SECONDS_PER_CHAR := 0.055
 const FADE_SECONDS := 0.4
 const SOFT := Color(1, 1, 1, 0.75)
+## Largura da janela (fração da tela).
+const WIDTH_SHARE := 0.62
 
 const TITLE := "Como tudo começou"
 const CAPTIONS := [
@@ -27,6 +29,7 @@ const HINT := "Clique ou Espaço: próxima"
 const DISCLAIMER := "Esta história é ficção. Qualquer semelhança com a realidade é mera coincidência. Ou não."
 
 var bus: StoryBus
+var _panel: PanelContainer
 var _captions: Array[Label] = []
 var _index := 0
 var _wait := 0.0
@@ -47,27 +50,26 @@ func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	var dim := ColorRect.new()
-	dim.color = Color(0.03, 0.035, 0.05, 0.96)
+	dim.color = Color(0.02, 0.02, 0.03, 0.75)
 	dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(dim)
-	var margin := MarginContainer.new()
-	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	for side in ["margin_left", "margin_right", "margin_top", "margin_bottom"]:
-		margin.add_theme_constant_override(side, UiStyle.SPACE_XL + UiStyle.SPACE_M)
-	add_child(margin)
+	# Janela no meio da tela: a animação no topo, como cabeçalho; embaixo, título e legendas.
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(center)
+	_panel = PanelContainer.new()
+	_panel.theme_type_variation = UiStyle.WINDOW
+	center.add_child(_panel)
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation", UiStyle.SPACE_M)
-	margin.add_child(column)
-	column.add_child(_label(TITLE, 40, UiStyle.GOLD))
+	_panel.add_child(column)
 	bus = StoryBus.new()
-	bus.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	bus.custom_minimum_size.y = 180
 	column.add_child(bus)
+	column.add_child(_label(TITLE, 36, UiStyle.GOLD))
 	# Legendas empilhadas no mesmo lugar: só uma aparece de cada vez.
 	var holder := Control.new()
-	holder.custom_minimum_size = Vector2(900, 112)
-	holder.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	holder.custom_minimum_size.y = 112
 	column.add_child(holder)
 	for i in CAPTIONS.size():
 		var last := i == CAPTIONS.size() - 1
@@ -93,10 +95,21 @@ func _ready() -> void:
 	_continue.pressed.connect(_accept)
 	buttons.add_child(_continue)
 	_continue.grab_focus()
+	resized.connect(_fit)
+	_fit.call_deferred()
 	_wait = _duration(0)
 	modulate.a = 0.0
 	create_tween().tween_property(self, "modulate:a", 1.0, ScreenTransition.OPEN_SECONDS)
 	Sfx.play(&"ui_open", 0.03, -10.0)
+
+
+## Largura da janela pela tela e cabeçalho proporcional, limitado pela altura da tela.
+func _fit() -> void:
+	if size.x <= 0.0:
+		return
+	var width := size.x * WIDTH_SHARE
+	_panel.custom_minimum_size.x = width
+	bus.custom_minimum_size.y = minf(width * 0.3, size.y * 0.36)
 
 
 func _process(delta: float) -> void:
