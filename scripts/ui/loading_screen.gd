@@ -209,7 +209,9 @@ func _finish() -> void:
 		for frame in 3:
 			await get_tree().process_frame
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	else:
+	elif not WebPlatform.active():
+		# No navegador o mouse só trava num clique (o carregamento passa do tempo do clique em
+		# "Começar", e a aba pode nem estar em foco): o jogador clica na tela para olhar em volta.
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	var tween := create_tween()
 	for child in get_children():

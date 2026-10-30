@@ -46,6 +46,16 @@ func _ready() -> void:
 	_credits.pressed.connect(func() -> void: CreditsScreen.open(self).closed.connect(_resume.grab_focus))
 
 
+## Trocou de aba ou de janela no meio do jogo: pausa e solta o mouse. Assim o jogo não fica
+## pedindo o mouse travado sem foco (no Chrome isso podia sumir com o ponteiro das outras abas).
+func _notification(what: int) -> void:
+	if what in [NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_WM_WINDOW_FOCUS_OUT] and is_inside_tree():
+		if not GameState.screen_open:
+			set_paused(true)
+		elif Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause"):
 		# Outra tela (loja, inventário, mapa) está aberta: ela trata o Esc.
