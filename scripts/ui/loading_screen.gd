@@ -64,6 +64,8 @@ var _jokes: Array = []
 var _next_joke_at := 0
 var _path := ""
 var _last_frame := 0
+## Pré-carga da web (prepare): cena para onde voltar quando terminar.
+var _return_to := ""
 
 
 ## Troca para a cena `path` mostrando a tela de carregamento.
@@ -72,6 +74,14 @@ static func change_to(tree: SceneTree, path: String) -> void:
 	StartupLog.mark("cena: pedido")
 	screen._path = path
 	ResourceLoader.load_threaded_request(path)
+
+
+## Versão web: monta o jogo atrás da tela de carregamento só para compilar os shaders e volta
+## para `back_to` (a tela inicial). Os shaders compilados ficam valendo: ao começar a partida, a
+## cidade monta em segundos, sem o aquecimento longo.
+static func prepare(tree: SceneTree, path: String, back_to: String) -> void:
+	change_to(tree, path)
+	current._return_to = back_to
 
 
 ## Mostra a tela (ou devolve a que já está aberta).
@@ -96,7 +106,7 @@ func track(world: CoinWorld) -> void:
 func warm_up(city: Node3D) -> void:
 	if not is_node_ready():
 		await ready
-	set_step("Preparando os gráficos…", 0.45)
+	set_step("Preparando os gráficos (só na abertura)…" if _return_to != "" else "Preparando os gráficos…", 0.45)
 	await ShaderWarmup.run(city, func(fraction: float) -> void: _bar.value = 0.45 + 0.15 * fraction)
 
 
@@ -192,7 +202,15 @@ func _finish() -> void:
 	StartupLog.mark("moedas em volta prontas")
 	_bar.value = 1.0
 	GameState.set_screen_open(false)
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	if _return_to != "":
+		# Pré-carga: volta para a tela inicial e só então some (ela aparece pronta por baixo).
+		get_tree().change_scene_to_file(_return_to)
+		_return_to = ""
+		for frame in 3:
+			await get_tree().process_frame
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	else:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	var tween := create_tween()
 	for child in get_children():
 		if child is CanvasItem:

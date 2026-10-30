@@ -26,6 +26,8 @@ static var _intro_played := false
 
 var _confirm_new_game := false
 var _intro: Tween
+## Web: shaders do jogo já compilados nesta sessão (LoadingScreen.prepare).
+static var _prepared := false
 
 
 func _ready() -> void:
@@ -54,6 +56,12 @@ func _ready() -> void:
 	_show_menu()
 	resized.connect(_fit_art)
 	_fit_art()
+	# Web: na primeira vez, compila os shaders do jogo agora (com a tela de carregamento) e volta
+	# para cá; começar a partida depois fica rápido. A abertura com o logo espera a volta.
+	if WebPlatform.active() and not _prepared:
+		_prepared = true
+		LoadingScreen.prepare(get_tree(), GAME_SCENE, scene_file_path)
+		return
 	if not _intro_played:
 		_intro_played = true
 		_play_intro()
