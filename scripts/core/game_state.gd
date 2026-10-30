@@ -118,6 +118,7 @@ func deposit() -> int:
 	var coins := ledger.deposit_carried()
 	if coins > 0:
 		notify("Depositou %s: +%s" % [MoneyFormat.coins(coins), MoneyFormat.brl(value)])
+		extras["biggest_deposit"] = maxi(int(extras.get("biggest_deposit", 0)), coins)
 		economy_changed.emit()
 		deposited.emit(coins)
 		_check_goal()
@@ -269,15 +270,17 @@ func request_portal(from: Vector3) -> void:
 	portal_requested.emit(from)
 
 
-## Libera uma conquista (Achievements.LIST). Retorna false se já tinha.
-func unlock(id: StringName) -> bool:
+## Libera uma conquista (Achievements.LIST). Retorna false se já tinha. `quiet`: sem aviso (quem
+## chama avisa várias de uma vez).
+func unlock(id: StringName, quiet := false) -> bool:
 	var list: Array = extras.get("achievements", [])
 	if String(id) in list:
 		return false
 	list.append(String(id))
 	extras["achievements"] = list
-	notify("Conquista: %s" % Achievements.title_of(id))
-	Sfx.play(&"chime", 0.0, -3.0)
+	if not quiet:
+		notify("Conquista: %s" % Achievements.title_of(id))
+		Sfx.play(&"chime", 0.0, -3.0)
 	save_game()
 	return true
 

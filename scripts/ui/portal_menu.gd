@@ -92,6 +92,7 @@ func _travel(hub: Dictionary) -> void:
 	await tween.finished
 	# Na frente do portal de destino (ao norte), olhando para oeste: a loja e o ponto de coleta.
 	var portal: Vector3 = hub.portal
+	GameState.bump("portal_trips")
 	var arrival := Vector3(portal.x, layout.ground_height(portal.x, portal.z - 2.5) + 0.1, portal.z - 2.5)
 	player.global_position = arrival
 	player.velocity = Vector3.ZERO

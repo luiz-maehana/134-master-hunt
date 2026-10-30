@@ -11,6 +11,7 @@ const ICON_COLOR := Color(0.28, 0.18, 0.04)
 @onready var _main_menu: Button = %MainMenu
 @onready var _quit: Button = %Quit
 var _credits: Button
+var _achievements: Button
 
 var _confirm_new_game := false
 ## Aberto (o menu ainda fica visível enquanto esmaece ao fechar).
@@ -24,7 +25,12 @@ func _ready() -> void:
 	_credits.text = "Créditos"
 	_quit.add_sibling(_credits)
 	_quit.get_parent().move_child(_credits, _quit.get_index())
-	for pair in [[_new_game, "return.png"], [_main_menu, "home.png"], [_credits, "information.png"], [_quit, "exit.png"]]:
+	_achievements = _quit.duplicate() as Button
+	_achievements.unique_name_in_owner = false
+	_achievements.text = "Conquistas"
+	_credits.add_sibling(_achievements)
+	_credits.get_parent().move_child(_achievements, _credits.get_index())
+	for pair in [[_new_game, "return.png"], [_main_menu, "home.png"], [_achievements, "trophy.png"], [_credits, "information.png"], [_quit, "exit.png"]]:
 		var button: Button = pair[0]
 		button.icon = load(ICONS + pair[1])
 		button.add_theme_constant_override("icon_max_width", 26)
@@ -36,6 +42,7 @@ func _ready() -> void:
 	_quit.pressed.connect(_on_quit)
 	# No navegador não há o que fechar (a aba fecha o jogo).
 	_quit.visible = not OS.has_feature("web")
+	_achievements.pressed.connect(_open_achievements)
 	_credits.pressed.connect(func() -> void: CreditsScreen.open(self).closed.connect(_resume.grab_focus))
 
 
@@ -46,6 +53,13 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 		set_paused(not _paused)
 		get_viewport().set_input_as_handled()
+
+
+## Fecha o menu e abre as conquistas (uma tela de cada vez).
+func _open_achievements() -> void:
+	set_paused(false)
+	if AchievementsMenu.current != null:
+		AchievementsMenu.current.open()
 
 
 func set_paused(paused: bool) -> void:

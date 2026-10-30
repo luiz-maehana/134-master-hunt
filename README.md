@@ -25,6 +25,7 @@ catando moeda por moeda pelo Eixo Monumental de Brasília, da Rodoviária ao Con
 | Tab | Inventário: % recolhido de cada bairro, robôs ("Trazer para cá"), variantes das ferramentas |
 | F11 | Tela cheia |
 | M | Mapa: bairros abertos e fechados, pontos de coleta, lojas, robôs e você em tempo real |
+| K | Conquistas: progresso da meta, moedas, dinheiro, cidade, equipamentos e os segredos já achados |
 | Esc | Menu (Continuar, Recomeçar, Menu inicial, Sair), com abas: **Controles** (sensibilidade e troca de qualquer tecla, incluindo predefinição para canhotos), **Vídeo** (predefinições Baixa a Ultra, detalhe das moedas, distância de visão, resolução 3D com FSR 2, VSync, limite de FPS, campo de visão, tamanho da interface, HUD mínimo) e **Áudio** (volume) |
 
 Teclas padrão; todas (menos Esc) podem ser trocadas no menu de pausa e ficam salvas.

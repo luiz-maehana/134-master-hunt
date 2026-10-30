@@ -48,20 +48,6 @@ func refresh() -> void:
 				button.pressed.connect(_equip.bind(variant.id))
 	for upgrade in GameState.owned_upgrades():
 		make_row("Melhoria  —  %s" % upgrade.display_name, [[upgrade.effect_summary(), COLOR_EFFECT]], "", false, false, ItemIcons.of(upgrade.id))
-	_add_achievement_row()
-
-
-## Conquistas dos segredos da cidade: as conseguidas pelo nome, as outras como "???".
-func _add_achievement_row() -> void:
-	var lines := []
-	var done := 0
-	for id: StringName in Achievements.LIST:
-		if GameState.has_achievement(id):
-			done += 1
-			lines.append(["%s  ·  %s" % [Achievements.LIST[id][0], Achievements.LIST[id][1]], COLOR_EFFECT])
-		else:
-			lines.append(["???", COLOR_INFO])
-	make_row("Conquistas  —  %d de %d" % [done, Achievements.LIST.size()], lines, "", false, false)
 
 
 func _equip(id: StringName) -> void:

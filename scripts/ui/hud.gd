@@ -91,9 +91,9 @@ func _update_help() -> void:
 	var label := get_node_or_null(^"%Help") as Label
 	if label == null:
 		return
-	label.text = "%s–%s: ferramentas  ·  %s: inventário  ·  %s: mapa  ·  Esc: menu" % [
+	label.text = "%s–%s: ferramentas  ·  %s: inventário  ·  %s: mapa  ·  %s: conquistas  ·  Esc: menu" % [
 		InputBindings.label_of(&"tool_slot_1"), InputBindings.label_of(&"tool_slot_4"), InputBindings.label_of(&"inventory"),
-		InputBindings.label_of(&"map")]
+		InputBindings.label_of(&"map"), InputBindings.label_of(&"achievements")]
 
 
 func _ready() -> void:

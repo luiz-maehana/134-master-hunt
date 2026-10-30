@@ -3,6 +3,7 @@ extends Node3D
 ## à posição dele, dá a lanterna à câmera e guarda a posição para o save.
 
 const PORTAL_MENU := preload("res://scenes/ui/portal_menu.tscn")
+const ACHIEVEMENTS_MENU := preload("res://scenes/ui/achievements_menu.tscn")
 
 @export var city: CityBuilder
 @export var coin_world: CoinWorld
@@ -33,6 +34,9 @@ func _ready() -> void:
 	portals.name = "PortalMenu"
 	portals.setup(city.layout, player, coin_world)
 	add_child(portals)
+	var achievements: AchievementsMenu = ACHIEVEMENTS_MENU.instantiate()
+	achievements.name = "AchievementsMenu"
+	add_child(achievements)
 	# Com janela: as moedas entram aos poucos atrás da tela de carregamento. Sem janela (testes),
 	# tudo de uma vez, como antes.
 	if DisplayServer.get_name() == "headless":

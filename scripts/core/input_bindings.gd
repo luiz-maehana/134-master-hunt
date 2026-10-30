@@ -29,6 +29,7 @@ const GROUPS := [
 	["Telas", [
 		[&"interact", "Interagir (loja, depósito)"],
 		[&"inventory", "Inventário"],
+		[&"achievements", "Conquistas"],
 		[&"map", "Mapa"],
 		[&"toggle_fullscreen", "Tela cheia"],
 	]],
@@ -47,6 +48,7 @@ const LEFT_HANDED := {
 	&"flashlight": "k%d" % KEY_KP_MULTIPLY,
 	&"inventory": "k%d" % KEY_KP_SUBTRACT,
 	&"map": "k%d" % KEY_KP_DIVIDE,
+	&"achievements": "k%d" % KEY_KP_9,
 	&"tool_slot_1": "k%d" % KEY_KP_1,
 	&"tool_slot_2": "k%d" % KEY_KP_2,
 	&"tool_slot_3": "k%d" % KEY_KP_3,

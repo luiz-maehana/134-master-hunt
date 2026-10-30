@@ -14,6 +14,7 @@ const SUITES := [
 	"res://tests/unit/test_save_game.gd",
 	"res://tests/unit/test_robot_rules.gd",
 	"res://tests/unit/test_denominations.gd",
+	"res://tests/unit/test_achievements.gd",
 	"res://tests/unit/test_settings_audio.gd",
 	"res://tests/integration/test_gameplay.gd",
 	"res://tests/integration/test_progression.gd",
