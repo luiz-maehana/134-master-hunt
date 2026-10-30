@@ -13,6 +13,9 @@ const HINT_REFRESH := 0.1
 const GAIN_MERGE_SECONDS := 1.2
 ## HUD mínimo: a barra de ferramentas fica visível por este tempo depois de trocar.
 const HOTBAR_SHOW_SECONDS := 2.0
+## Segundos até a virada do final (a prancheta da prestação de contas).
+const VICTORY_TWIST_SECONDS := 6.0
+
 ## Marcos em centavos: R$ 1, R$ 10, R$ 100... até os R$ 134 milhões.
 const MILESTONES: Array[int] = [100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000,
 	1_000_000_000, 5_000_000_000, 10_000_000_000, 13_400_000_000]
@@ -325,9 +328,13 @@ func _show_banner(text: String) -> void:
 
 func _show_victory() -> void:
 	var ledger := GameState.ledger
-	_victory_text.text = "VOCÊ CONSEGUIU!\n%s encontrados\nem %s moedas\n\nAgora só falta trocar tudo isso no banco." % [
+	_victory_text.text = "OBJETIVO CONCLUÍDO!\n%s encontrados\nem %s moedas" % [
 		MoneyFormat.brl(ledger.total_value_found_cents), MoneyFormat.group(ledger.total_coins_found)]
 	_victory.visible = true
+	GameState.unlock(&"accountability")
+	# O final secreto: a montanha de moedas ainda precisa de explicação.
+	await get_tree().create_timer(VICTORY_TWIST_SECONDS).timeout
+	_victory_text.text = "Um funcionário com uma prancheta:\n“Parabéns! Agora precisamos verificar\na origem de cada moeda.”\n\n134 MASTER HUNT 2:\nA PRESTAÇÃO DE CONTAS\nEm breve."
 
 
 # --- HUD mínimo ---------------------------------------------------------------------------

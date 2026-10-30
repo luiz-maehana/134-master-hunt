@@ -163,6 +163,47 @@ func test_portals_travel_between_shops() -> void:
 	GameState.tools_changed.emit()
 
 
+func test_city_secrets() -> void:
+	var secrets := city.get_node("Secrets") as CitySecrets
+	var extras_before := GameState.extras.duplicate(true)
+	var money := GameState.ledger.money_cents
+	var use := func(node_name: String) -> void:
+		Interactable.find_on(secrets.get_node(node_name)).interact(player)
+	# Urna: dez votos liberam a conquista.
+	for i in CitySecrets.VOTES_FOR_LOOP:
+		use.call("BallotBox")
+	check(GameState.has_achievement(&"democracy_loop"), "urna: Democracia em Loop após 10 votos")
+	# Jornal: a mesma pilha muda de manchete a cada leitura.
+	for i in 3:
+		use.call("Newspaper_0")
+	check(GameState.has_achievement(&"newsroom"), "jornal: três versões lidas")
+	# Senhor V.: larga um centavo e muda de lugar.
+	var before: Vector3 = secrets.get_node("SenhorV").position
+	use.call("SenhorV")
+	check(secrets.get_node("SenhorV").position != before, "Senhor V. some e aparece em outro lugar")
+	check_eq(GameState.ledger.money_cents, money + 1, "Senhor V. deixou cair 1 centavo")
+	for i in 2:
+		use.call("SenhorV")
+	check(GameState.has_achievement(&"complex_structure"), "três encontros com o Senhor V.")
+	# Pipoca custa 1 centavo; a moeda lendária dá 1 e some.
+	use.call("Popcorn")
+	check(GameState.has_achievement(&"popcorn"), "pipoca comprada")
+	if secrets.has_node("LegendaryCoin"):
+		use.call("LegendaryCoin")
+	check(GameState.has_achievement(&"legendary_coin"), "moeda lendária encontrada")
+	# Nada disso mexe no mundo de moedas (a meta continua exata).
+	check_eq(world.remaining_total() + GameState.world_removed_value, world.definition.total_value_cents, "total do mundo intacto")
+	# Conquistas e contadores voltam do save.
+	var data := SaveSerializer.to_dict(GameState)
+	var copy: Dictionary = JSON.parse_string(JSON.stringify(data))
+	var achievements: Array = GameState.extras.achievements.duplicate()
+	GameState.extras = {}
+	SaveSerializer.apply(GameState, copy)
+	check_eq(GameState.extras.get("achievements", []), achievements, "conquistas voltam do save")
+	check_eq(int(GameState.extras.get("votes", 0)), CitySecrets.VOTES_FOR_LOOP, "votos voltam do save")
+	GameState.extras = extras_before
+
+
 func test_hands_take_one_coin() -> void:
 	var pile := await _stand_south_of_pile(1)
 	if pile.is_empty():

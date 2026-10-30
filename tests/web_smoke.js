@@ -19,6 +19,15 @@ const IGNORED = [/AudioContext was not allowed/, /WebGL/i, /GPU stall/i, /favico
     if (m.type() === 'error' || /SCRIPT ERROR|^ERROR:|Cannot get class|not available/.test(text)) problems.push(text);
   });
   page.on('pageerror', (e) => problems.push('pageerror: ' + e.message));
+  // Captura com folga: no SwiftShader um quadro da cidade pode levar dezenas de segundos. Se nem
+  // assim sair, só avisa (o que reprova é erro do motor no console).
+  const shot = async (name) => {
+    try {
+      await page.screenshot({ path: `${out}/${name}.png`, timeout: 120000 });
+    } catch (e) {
+      console.log(`captura ${name} não saiu (desenho por software lento): ${e.message.split('\n')[0]}`);
+    }
+  };
 
   await page.goto(url);
   await page.waitForFunction(() => {
@@ -28,16 +37,16 @@ const IGNORED = [/AudioContext was not allowed/, /WebGL/i, /GPU stall/i, /favico
     return st.display === 'none' || st.visibility === 'hidden' || st.opacity === '0';
   }, null, { timeout: 240000 });
   await page.waitForTimeout(5000);
-  await page.screenshot({ path: `${out}/01_abertura.png` });
+  await shot('01_abertura');
 
   // Qualquer tecla pula a abertura com o logo; depois Enter aperta "Começar".
   await page.keyboard.press('Space');
   await page.waitForTimeout(4000);
-  await page.screenshot({ path: `${out}/02_titulo.png` });
+  await shot('02_titulo');
   await page.keyboard.press('Enter');
   // Carregar a cidade e espalhar as moedas por software leva tempo.
   await page.waitForTimeout(150000);
-  await page.screenshot({ path: `${out}/03_cidade.png` });
+  await shot('03_cidade');
   await browser.close();
 
   if (problems.length) {

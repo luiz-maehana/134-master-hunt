@@ -18,7 +18,7 @@ Resumo para retomar o desenvolvimento. Última atualização: 2026-10-30.
   | Esplanada dos Ministérios | 15 | 167/m² |
   | Congresso Nacional | 22 | 221/m² |
 
-- **Testes:** 987 verificações, 0 falhas.
+- **Testes:** 1012 verificações, 0 falhas.
   - Comando: `godot --headless --path . --script tests/run_tests.gd`
   - O teste de interface (`tests/integration/test_ui_layout.gd`) também deve ser rodado com
     janela de vez em quando.
@@ -81,7 +81,8 @@ Também feito depois da spec:
 - [x] Otimização das moedas (GPU era o gargalo): malha indexada, terceiro nível de detalhe (4 lados a partir do 2º anel, `DISTANT_FROM`/`DISTANT_SIDES`) e malha detalhada só a poucos metros do jogador (distância real, `DETAIL_LEVELS[2]` em metros). Ultra no Congresso: 8,2 → 5,4 ms (122 → 184 FPS); triângulos 9,1 → 4,9 mi. `tools/benchmark.gd` agora mede sem VSync/limite e mostra GPU e CPU de desenho.
 - [x] Mais detalhes: 18 pontos de ônibus nas avenidas, 89 hidrantes nas calçadas, metade das floreiras florida. Assinatura do mundo igual.
 - [x] Menos chamadas de desenho: peças dos marcos juntadas por material (`LandmarkBuilder._merge_meshes`), detalhes das lojas e portais com distância de exibição (`HUB_VISIBLE`, `WARES_VISIBLE`), sem sombra para coisas rentes ao chão (`NO_SHADOW`). Rodoviária 1.026 → ~330 chamadas; CPU de desenho ~2 → ~1 ms.
-- [ ] Versão web: testado no desktop com `--rendering-method gl_compatibility` e funciona (sem SSAO e FSR 2). Falta: preset Web, padrões leves para navegador, checar a geração de blocos em thread sem threads, publicação (GitHub Pages, como em onde-esta-flavio-bolsonaro).
+- [x] Versão web e repositório público: https://github.com/luiz-maehana/134-master-hunt (commits com o e-mail privado do GitHub). Preset "Web" (Compatibility, sem threads), padrões leves no navegador (`Settings._web_defaults`), sem FSR 2 e sem botão Sair na web, blocos dos robôs gerados sem thread quando não há threads. `.github/workflows/build.yml`: testes → `check_publish.sh` → export Web → teste no navegador (`tests/web_smoke.js`, Playwright) → GitHub Pages (https://luiz-maehana.github.io/134-master-hunt/).
+- [x] Segredos satíricos (`CitySecrets`, tudo fictício, nenhum nome real; fora do sorteio das moedas): moeda lendária ao pé do mastro, jornais que mudam de manchete em cada ponto de coleta, cartazes de 5 partidos inventados nos muros, urna das promessas (Esplanada), cartaz "Dark Horse: The Untold Budget" com máquina de pipoca de 1 centavo (muro norte do Setor Cultural), Senhor V. (banqueiro evasivo que muda de beco), final secreto da prancheta. 7 conquistas (`Achievements`, salvas em `GameState.extras`, lista no inventário). Próximo lote possível: aeroporto/passaporte, fuga, banco, ímã de emendas, produtora.
 
 ### Para o jogador conferir jogando
 - [ ] A mão fechando ao pegar (posição e inclinação).

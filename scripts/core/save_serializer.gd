@@ -21,6 +21,7 @@ static func to_dict(state: GameStateNode) -> Dictionary:
 		"world": state.world.to_save(),
 		"time_of_day": state.time_of_day,
 		"world_signature": state.world_signature,
+		"extras": state.extras.duplicate(true),
 	}
 	if state.player_position is Vector3:
 		var p: Vector3 = state.player_position
@@ -58,6 +59,7 @@ static func apply(state: GameStateNode, data: Dictionary) -> void:
 	var signature: Variant = data.get("world_signature")
 	if signature is String:
 		state.world_signature = signature
+	_apply_extras(state, data.get("extras"))
 	state.robots = _robots_for(state, data.get("robots"))
 
 
@@ -114,3 +116,21 @@ static func _robots_for(state: GameStateNode, raw: Variant) -> Array[Dictionary]
 			var list: Array = saved.get(id, [])
 			robots.append({"id": id, "pos": list.pop_front() if not list.is_empty() else Vector2.INF})
 	return robots
+
+
+## Segredos: só números e listas de textos conhecidos; o resto é ignorado.
+static func _apply_extras(state: GameStateNode, value: Variant) -> void:
+	if not value is Dictionary:
+		return
+	for key: Variant in value:
+		if not key is String:
+			continue
+		var item: Variant = value[key]
+		if key == "achievements" and item is Array:
+			var known: Array = []
+			for id: Variant in item:
+				if id is String and Achievements.LIST.has(StringName(id)) and not id in known:
+					known.append(id)
+			state.extras[key] = known
+		elif _is_finite_number(item):
+			state.extras[key] = maxi(int(item), 0)

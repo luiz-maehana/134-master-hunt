@@ -40,7 +40,7 @@ o ímã a até 40 m e trazem as moedas de volta), pochete/mochila/carrinho e as 
 ricos: Setor Cultural, Esplanada dos Ministérios e Congresso Nacional, onde o chão é um mar de pilhas de 25, 50 centavos e R$ 1.
 Com o carrinho, a Ferragem passa a vender **robôs** (aspiradores robôs: o de casa, o industrial e o gigante):
 você os deixa num lugar e eles recolhem sozinhos ao redor, depositando direto. Quando a área
-acaba, eles avisam; traga-os para perto pelo inventário (Tab). Com o **Contrato dos portais**, o portal ao lado de cada loja leva
+acaba, eles avisam; traga-os para perto pelo inventário (Tab). A cidade também esconde segredos (e conquistas) para quem anda com atenção. Com o **Contrato dos portais**, o portal ao lado de cada loja leva
 você para qualquer outra loja dos bairros liberados (E no portal, escolha o destino). O HUD mostra quanto de cada
 bairro já foi recolhido. As moedas não voltam: o mapa vai ficando limpo. O progresso é salvo
 automaticamente. Pelas contas do balanceamento, zerar leva por volta de 7 a 8 horas.

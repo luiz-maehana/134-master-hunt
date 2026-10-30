@@ -71,6 +71,9 @@ var pending_notice := ""
 var save_enabled := true
 var save_path := SaveGame.DEFAULT_PATH
 var _goal_announced := false
+## Segredos da cidade (sátira): conquistas, jornais lidos, votos na urna, encontros com o Senhor V.
+## Só tipos simples (vai direto para o JSON do save).
+var extras := {}
 
 
 func _ready() -> void:
@@ -266,6 +269,30 @@ func request_portal(from: Vector3) -> void:
 	portal_requested.emit(from)
 
 
+## Libera uma conquista (Achievements.LIST). Retorna false se já tinha.
+func unlock(id: StringName) -> bool:
+	var list: Array = extras.get("achievements", [])
+	if String(id) in list:
+		return false
+	list.append(String(id))
+	extras["achievements"] = list
+	notify("Conquista: %s" % Achievements.title_of(id))
+	Sfx.play(&"chime", 0.0, -3.0)
+	save_game()
+	return true
+
+
+func has_achievement(id: StringName) -> bool:
+	return String(id) in (extras.get("achievements", []) as Array)
+
+
+## Contador dos segredos (jornal lido, votos...). Soma `by` e devolve o valor novo.
+func bump(key: String, by := 1) -> int:
+	var value := int(extras.get(key, 0)) + by
+	extras[key] = value
+	return value
+
+
 func notify(text: String) -> void:
 	notified.emit(text)
 
@@ -284,6 +311,7 @@ func reset() -> void:
 	time_of_day = 0.3
 	screen_open = false
 	_goal_announced = false
+	extras = {}
 	recompute_stats()
 	tools_changed.emit()
 	robots_changed.emit()

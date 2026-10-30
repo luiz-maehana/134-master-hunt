@@ -86,6 +86,10 @@ func _ready() -> void:
 	_build_backdrop()
 	_build_fences()
 	_build_hubs()
+	var secrets := CitySecrets.new()
+	secrets.name = "Secrets"
+	secrets.setup(layout)
+	add_child(secrets)
 	GameState.tools_changed.connect(_refresh_fences)
 	_refresh_fences()
 	Settings.changed.connect(_apply_quality)

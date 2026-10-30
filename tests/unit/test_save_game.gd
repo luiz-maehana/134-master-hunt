@@ -191,3 +191,18 @@ func test_changed_city_resets_coins_but_keeps_items() -> void:
 	GameState.check_world_signature("cidade-b|pilhas-2", "cidade-b")
 	check_eq(GameState.world_removed, 0, "sorteio das pilhas mudou: moedas voltam ao chão (com aviso), não só alguns blocos")
 	GameState.reset()
+
+
+## Segredos no save: só conquistas conhecidas e números; lixo é ignorado.
+func test_extras_are_validated() -> void:
+	GameState.reset()
+	var data := SaveSerializer.to_dict(GameState)
+	data["extras"] = {"achievements": ["democracy_loop", "inventada", 7, "democracy_loop"], "votes": 4.0,
+		"paper_2": -3, "nome": "texto", 9: 1}
+	GameState.extras = {}
+	SaveSerializer.apply(GameState, data)
+	check_eq(GameState.extras.get("achievements"), ["democracy_loop"], "só conquistas conhecidas, sem repetir")
+	check_eq(GameState.extras.get("votes"), 4, "contador numérico")
+	check_eq(GameState.extras.get("paper_2"), 0, "negativo vira zero")
+	check(not GameState.extras.has("nome"), "texto solto ignorado")
+	GameState.reset()
