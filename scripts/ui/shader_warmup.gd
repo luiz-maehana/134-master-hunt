@@ -84,6 +84,26 @@ static func run(city: Node3D, progress: Callable) -> void:
 			if kind != first:
 				ordered[kind] = groups[kind]
 		groups = ordered
+	# Letreiros, mercadoria e faíscas têm distância de exibição (somem de longe): a câmera alta não
+	# os desenharia e eles compilariam no meio do jogo. Durante o aquecimento, aparecem sempre.
+	var ranges := {}   # GeometryInstance3D -> distância original
+	for node in city.find_children("*", "GeometryInstance3D", true, false):
+		var geometry := node as GeometryInstance3D
+		if geometry.visibility_range_end > 0.0:
+			ranges[geometry] = geometry.visibility_range_end
+			geometry.visibility_range_end = 0.0
+	# Efeitos que só aparecem jogando: faíscas ao pegar, chuva de moedas no depósito e a linha da
+	# vara (opaca e tracejada). Aparecem uma vez, numa etapa própria, no centro da cidade.
+	var samples := Node3D.new()
+	samples.visible = false
+	city.add_child(samples)
+	for color: Color in [Color(0.9, 0.9, 0.9), Color(0.9, 0.9, 0.9, 0.6)]:
+		var line := MeshInstance3D.new()
+		line.mesh = BoxMesh.new()
+		line.material_override = RodLine.flat_material(color)
+		line.scale = Vector3.ONE * 20.0
+		samples.add_child(line)
+	groups["efeitos do jogo"] = [samples]
 	StartupLog.mark("gráficos: tudo escondido")
 	await tree.process_frame
 	StartupLog.mark("gráficos: primeiro quadro escondido")
@@ -104,6 +124,9 @@ static func run(city: Node3D, progress: Callable) -> void:
 		else:
 			for node: Node3D in groups[kind]:
 				node.visible = true
+		if kind == "efeitos do jogo":
+			PickupSparkle.burst(samples, Vector3(0, 2, 0), 24)
+			CoinShower.burst(samples, Vector3(10, 2, 0), 6000)
 		if kind == "céu":
 			environment.background_mode = background
 			environment.ambient_light_source = ambient
@@ -112,6 +135,10 @@ static func run(city: Node3D, progress: Callable) -> void:
 		step += 1
 		StartupLog.mark("gráficos: %s" % kind)
 		progress.call(float(step) / groups.size())
+	for geometry: GeometryInstance3D in ranges:
+		if is_instance_valid(geometry):
+			geometry.visibility_range_end = ranges[geometry]
+	samples.queue_free()
 	if previous != null and is_instance_valid(previous):
 		previous.make_current()
 	camera.queue_free()

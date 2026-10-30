@@ -77,6 +77,8 @@ func _build_legendary_coin() -> void:
 	coin.position.y = 0.6
 	coin.set_meta(&"spin", true)
 	_legendary.add_child(coin)
+	if WebPlatform.active():
+		return
 	var light := OmniLight3D.new()
 	light.light_color = GOLD
 	light.light_energy = 2.0

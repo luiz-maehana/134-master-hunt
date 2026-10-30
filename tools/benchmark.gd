@@ -67,7 +67,7 @@ func _measure(main: Node, settings: Node, preset: int, spot: Array, hour: float,
 	player.get_node("Head").rotation.x = -0.1
 	var flashlight: Node3D = player.get_node_or_null("Head/Camera3D/Flashlight")
 	if flashlight != null:
-		flashlight.visible = label == "noite"
+		flashlight.set("on", label == "noite")
 	main.get_node("City/CoinWorld").call("load_around", player.global_position)
 	for i in 60:
 		await process_frame

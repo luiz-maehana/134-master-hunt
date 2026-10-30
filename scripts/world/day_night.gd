@@ -9,6 +9,8 @@ extends Node
 const CYCLE_SECONDS := 1200.0
 ## Luzes de verdade só nos postes mais perto do jogador (o resto só brilha).
 const LAMP_LIGHTS := 8
+## Luz ambiente mínima à noite na web (sem as luzes dos postes e da lanterna).
+const WEB_NIGHT_AMBIENT := 0.45
 const LAMP_UPDATE := 0.4
 ## A hora é aplicada a céu e luzes só a cada APPLY_INTERVAL: mudar o céu refaz o reflexo dele,
 ## que é caro; num dia de 20 min a diferença entre duas aplicações é invisível.
@@ -60,7 +62,9 @@ func setup(sun: DirectionalLight3D, environment: Environment, building_material:
 func _ready() -> void:
 	current = self
 	_build_lamp_glow()
-	for i in LAMP_LIGHTS:
+	# Na web as luzes dos postes ficam só no brilho das lâmpadas: cada luz nova no WebGL obriga a
+	# compilar shaders de tudo na tela (trava de segundos). Lá a noite é um pouco mais clara.
+	for i in 0 if WebPlatform.active() else LAMP_LIGHTS:
 		var light := OmniLight3D.new()
 		light.light_color = Color(1, 0.82, 0.55)
 		light.light_energy = 2.2
@@ -137,7 +141,7 @@ func apply() -> void:
 		_sky.ground_horizon_color = horizon
 		_sky.sky_energy_multiplier = lerpf(0.35, 1.0, daylight)
 	if _environment != null:
-		_environment.ambient_light_energy = lerpf(0.28, 1.0, daylight)
+		_environment.ambient_light_energy = lerpf(WEB_NIGHT_AMBIENT if WebPlatform.active() else 0.28, 1.0, daylight)
 		_environment.fog_light_color = HORIZON_NIGHT.lerp(Color(0.84, 0.8, 0.74), daylight)
 	if _building_material != null:
 		_building_material.set_shader_parameter(&"night", night)

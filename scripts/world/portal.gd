@@ -45,7 +45,8 @@ func _on_interacted(_by: Node) -> void:
 func _refresh() -> void:
 	var active := is_active()
 	_disc.set_instance_shader_parameter(&"active", 1.0 if active else 0.0)
-	_light.visible = active
+	# Na web, sem a luz roxa (luz nova no WebGL = shaders a compilar); o disco já brilha sozinho.
+	_light.visible = active and not WebPlatform.active()
 	_sparkles.emitting = active
 	_sign.modulate = Color(0.8, 0.65, 1.0) if active else Color(0.55, 0.55, 0.6)
 	_interactable.prompt_text = "Portal: viajar para outra loja" if active else "Portal desligado (contrato na Ferragem)"
