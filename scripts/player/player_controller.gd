@@ -12,12 +12,18 @@ extends "res://addons/basic_fps_controller/scripts/fps_controller.gd"
 
 ## Distância entre dois passos (m), andando.
 const STEP_LENGTH := 1.6
+## Filtro de saltos do mouse (accepts_motion): pixels num evento e quantas vezes o movimento recente.
+const SPIKE_PIXELS := 250.0
+const SPIKE_RATIO := 6.0
 
 var _base_h_sensitivity := 0.0
 var _base_v_sensitivity := 0.0
 var _base_walk_speed := 0.0
 var _base_sprint_speed := 0.0
 var _step_distance := 0.0
+## Média recente do tamanho dos movimentos do mouse e eventos a ignorar (depois de capturar).
+var _recent_motion := 0.0
+var _skip_motion := 0
 
 
 func _ready() -> void:
@@ -28,6 +34,10 @@ func _ready() -> void:
 	_base_sprint_speed = sprint_speed
 	Settings.changed.connect(_apply_settings)
 	GameState.stats_changed.connect(_apply_stats)
+	# Fechar uma tela recaptura o mouse: o primeiro movimento depois disso é o puxão para o centro.
+	GameState.screen_changed.connect(func(open: bool) -> void:
+		if not open:
+			_skip_motion = 1)
 	_apply_stats()
 	_apply_settings()
 
@@ -38,10 +48,29 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event is InputEventMouseButton and event.pressed and Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		_skip_motion = 1
 		# O clique que recaptura o mouse não deve usar a ferramenta.
 		get_viewport().set_input_as_handled()
 	elif event is InputEventMouseMotion:
-		super(event)
+		if accepts_motion((event as InputEventMouseMotion).relative):
+			super(event)
+
+
+## Filtro de saltos do mouse: o primeiro movimento depois de capturar o cursor (ele é puxado
+## para o centro) e saltos absurdos, muito maiores que o movimento recente (bug conhecido do
+## Chrome com o mouse travado), jogavam a câmera de uma vez para cima ou para baixo.
+## Giros rápidos de verdade passam: crescem ao longo de vários eventos.
+func accepts_motion(relative: Vector2) -> bool:
+	if _skip_motion > 0:
+		_skip_motion -= 1
+		return false
+	var size := relative.length()
+	if size > SPIKE_PIXELS and size > _recent_motion * SPIKE_RATIO:
+		# Um giro rápido de verdade continua grande no evento seguinte: esse já passa.
+		_recent_motion = maxf(_recent_motion, size / SPIKE_RATIO)
+		return false
+	_recent_motion = lerpf(_recent_motion, size, 0.25)
+	return true
 
 
 func _physics_process(delta: float) -> void:

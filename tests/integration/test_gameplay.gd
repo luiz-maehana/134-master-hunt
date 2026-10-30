@@ -232,6 +232,26 @@ func test_escape_easter_eggs() -> void:
 	GameState.extras = extras_before
 
 
+func test_mouse_spikes_are_ignored() -> void:
+	var controller := player as PlayerController
+	controller.set("_skip_motion", 0)
+	controller.set("_recent_motion", 0.0)
+	for i in 10:
+		check(controller.accepts_motion(Vector2(4, -3)), "movimento pequeno passa")
+	check(not controller.accepts_motion(Vector2(30, -2400)), "salto isolado (bug do Chrome) é ignorado")
+	check(controller.accepts_motion(Vector2(3, 2)), "volta ao normal logo depois")
+	# Giro rápido de verdade, saindo do repouso: só o primeiro evento grande é segurado.
+	controller.set("_recent_motion", 0.0)
+	var passed := 0
+	for i in 6:
+		passed += 1 if controller.accepts_motion(Vector2(420, 10)) else 0
+	check(passed >= 5, "giro rápido contínuo passa (%d de 6)" % passed)
+	# Depois de recapturar o mouse, o puxão para o centro não gira a câmera.
+	controller.set("_skip_motion", 1)
+	check(not controller.accepts_motion(Vector2(0, -600)), "primeiro movimento depois de capturar é ignorado")
+	check(controller.accepts_motion(Vector2(2, 1)), "o seguinte passa")
+
+
 func test_hands_take_one_coin() -> void:
 	var pile := await _stand_south_of_pile(1)
 	if pile.is_empty():
