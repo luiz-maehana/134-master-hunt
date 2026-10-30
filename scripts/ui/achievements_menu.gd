@@ -24,7 +24,9 @@ func _ready() -> void:
 	_trophy = load(ICONS + "trophy.png")
 	_locked = load(ICONS + "locked.png")
 	for changed: Signal in [GameState.economy_changed, GameState.tools_changed, GameState.robots_changed]:
-		changed.connect(Achievements.check)
+		# A função é estática: ao recarregar a cena ("Recomeçar") ela já está ligada.
+		if not changed.is_connected(Achievements.check):
+			changed.connect(Achievements.check)
 	Achievements.check.call_deferred()
 
 

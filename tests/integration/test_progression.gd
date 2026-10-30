@@ -191,6 +191,40 @@ func test_credits_screen() -> void:
 	pause_menu.set_paused(false)
 
 
+func test_story_before_new_game() -> void:
+	pause_menu.set_paused(true)
+	var found := GameState.ledger.total_coins_found
+	var button: Button = pause_menu.get("_new_game")
+	button.pressed.emit()
+	button.pressed.emit()
+	await process_frames(2)
+	var stories := pause_menu.find_children("*", "StoryScreen", true, false)
+	check_eq(stories.size(), 1, "recomeçar mostra a história antes")
+	var text := ""
+	for label in stories[0].find_children("*", "Label", true, false):
+		text += (label as Label).text
+	check(text.contains("134") and text.contains("moedas") and text.contains("ficção"), "a história fala das moedas e avisa que é ficção")
+	var esc := InputEventAction.new()
+	esc.action = &"pause"
+	esc.pressed = true
+	tree.root.push_input(esc)
+	await tree.create_timer(0.3).timeout
+	check(pause_menu.find_children("*", "StoryScreen", true, false).is_empty(), "Esc (Voltar) fecha a história")
+	check_eq(GameState.ledger.total_coins_found, found, "e não apaga o progresso")
+	check(pause_menu.get("_paused"), "e o menu continua aberto")
+	# Continuar avisa uma vez só (Continuar e Voltar não valem os dois).
+	var story := StoryScreen.open(tree.root)
+	var accepted := [0]
+	story.accepted.connect(func() -> void: accepted[0] += 1)
+	var continue_button: Button = story.get("_continue")
+	continue_button.pressed.emit()
+	continue_button.pressed.emit()
+	story.close()
+	check_eq(accepted[0], 1, "Continuar começa a partida uma vez")
+	pause_menu.set_paused(false)
+	pause_menu.set_paused(false)
+
+
 func _rows(menu: MenuScreen) -> int:
 	return menu.items_box.get_child_count()
 

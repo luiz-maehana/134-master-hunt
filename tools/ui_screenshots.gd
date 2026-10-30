@@ -1,5 +1,5 @@
 extends SceneTree
-## Capturas de todas as telas (capa, créditos, HUD, loja, inventário, mapa, menu, HUD mínimo) em várias resoluções,
+## Capturas de todas as telas (capa, créditos, história, HUD, loja, inventário, mapa, menu, HUD mínimo) em várias resoluções,
 ## para revisar a interface. Precisa de placa de vídeo:
 ##   godot --path . --script res://tools/ui_screenshots.gd -- <pasta de saída> [LxA ...]
 ## Sem resoluções, usa as 7 da spec. Não toca no save nem nas preferências do jogador.
@@ -41,6 +41,11 @@ func _capture_all(state: Node) -> void:
 	await _shot("1_titulo")
 	title.call("_show_credits")
 	await _shot("1b_creditos", 60)
+	for credits in title.find_children("*", "CreditsScreen", true, false):
+		credits.free()
+	var story: Node = load("res://scripts/ui/story_screen.gd").call("open", title)
+	story.call("skip")
+	await _shot("1c_historia", 30)
 	title.free()
 	var main: Node = load("res://scenes/main.tscn").instantiate()
 	root.add_child(main)

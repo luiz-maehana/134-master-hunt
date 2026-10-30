@@ -145,8 +145,12 @@ func _on_new_game() -> void:
 		_confirm_new_game = true
 		_new_game.text = "Apagar a partida salva? Clique de novo"
 		return
-	GameState.new_game()
-	_start()
+	# A história antes; a partida salva só se apaga em Continuar.
+	var story := StoryScreen.open(self)
+	story.closed.connect(_show_menu)
+	story.accepted.connect(func() -> void:
+		GameState.new_game()
+		_start())
 
 
 func _start() -> void:

@@ -92,9 +92,13 @@ func _on_new_game() -> void:
 		_confirm_new_game = true
 		_new_game.text = "Apagar progresso? Clique de novo"
 		return
-	GameState.new_game()
-	set_paused(false)
-	get_tree().reload_current_scene()
+	# A história antes; o progresso só se apaga em Continuar.
+	var story := StoryScreen.open(self)
+	story.closed.connect(set_paused.bind(true))
+	story.accepted.connect(func() -> void:
+		GameState.new_game()
+		set_paused(false)
+		get_tree().reload_current_scene())
 
 
 ## Salva e volta para a tela inicial.
