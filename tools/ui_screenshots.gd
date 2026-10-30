@@ -44,8 +44,14 @@ func _capture_all(state: Node) -> void:
 	for credits in title.find_children("*", "CreditsScreen", true, false):
 		credits.free()
 	var story: Node = load("res://scripts/ui/story_screen.gd").call("open", title)
+	await process_frame
+	await process_frame
+	# No meio da passagem do ônibus (moedas no ar) e no fim da história.
+	story.get("bus").call("fast_forward", 4.5)
+	await _shot("1c_historia", 2)
 	story.call("skip")
-	await _shot("1c_historia", 30)
+	story.get("bus").call("fast_forward", 6.0)
+	await _shot("1d_historia_fim", 30)
 	title.free()
 	var main: Node = load("res://scenes/main.tscn").instantiate()
 	root.add_child(main)

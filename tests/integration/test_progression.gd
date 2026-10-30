@@ -204,6 +204,9 @@ func test_story_before_new_game() -> void:
 	for label in stories[0].find_children("*", "Label", true, false):
 		text += (label as Label).text
 	check(text.contains("134") and text.contains("moedas") and text.contains("ficção"), "a história fala das moedas e avisa que é ficção")
+	var bus: StoryBus = stories[0].bus
+	bus.fast_forward(5.0)
+	check(bus.coin_count() > 50, "o ônibus passa espalhando moedas (%d)" % bus.coin_count())
 	var esc := InputEventAction.new()
 	esc.action = &"pause"
 	esc.pressed = true
