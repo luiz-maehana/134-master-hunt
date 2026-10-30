@@ -111,8 +111,8 @@ static func event_label(event: InputEvent) -> String:
 		if code >= KEY_KP_0 and code <= KEY_KP_9:
 			return "Num %d" % (code - KEY_KP_0)
 		# Nome conforme o layout do teclado do jogador (ex.: Ç no ABNT2).
-		# Sem janela (headless, testes) o servidor não conhece o layout e só reclama.
-		var shown := KEY_NONE if DisplayServer.get_name() == "headless" else DisplayServer.keyboard_get_keycode_from_physical(code)
+		# Sem janela (headless, testes) e no navegador o servidor não conhece o layout e só reclama.
+		var shown := KEY_NONE if DisplayServer.get_name() == "headless" or OS.has_feature("web") else DisplayServer.keyboard_get_keycode_from_physical(code)
 		return OS.get_keycode_string(shown if shown != KEY_NONE else code)
 	return "—"
 

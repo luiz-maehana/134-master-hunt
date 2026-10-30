@@ -90,6 +90,10 @@ func _ready() -> void:
 	easter_eggs.name = "EasterEggs"
 	easter_eggs.setup(layout)
 	add_child(easter_eggs)
+	var escape := EscapeEasterEggs.new()
+	escape.name = "EscapeEasterEggs"
+	escape.setup(layout)
+	add_child(escape)
 	GameState.tools_changed.connect(_refresh_fences)
 	_refresh_fences()
 	Settings.changed.connect(_apply_quality)

@@ -6,7 +6,6 @@ extends Node3D
 ## moedas, então a assinatura do mundo não muda. Estado (lidos, votos...) em GameState.extras.
 
 const GOLD := Color(1.0, 0.78, 0.2)
-const FONT_SIZE := 64
 ## Partidos fictícios dos cartazes: [sigla, nome, slogan, cor do fundo].
 const PARTIES := [
 	["PCP", "Partido do Centavo Perdido", "Um centavo no chão,\num milhão na promessa!", Color(0.75, 0.15, 0.15)],
@@ -69,7 +68,7 @@ func _build_legendary_coin() -> void:
 		return
 	var center: Vector2 = (flag.area as Rect2).get_center()
 	var at := Vector3(center.x + 3.0, layout.ground_height(center.x + 3.0, center.y), center.y)
-	_legendary = _interactive("LegendaryCoin", at, Vector3(0.6, 1.2, 0.6), "Pegar a moeda lendária", _take_legendary)
+	_legendary = EasterEggKit.interactive(self, "LegendaryCoin", at, Vector3(0.6, 1.2, 0.6), "Pegar a moeda lendária", _take_legendary)
 	var coin := MeshInstance3D.new()
 	coin.mesh = CoinVisuals.shared_mesh()
 	CoinVisuals.set_denomination(coin, 0)
@@ -89,8 +88,7 @@ func _build_legendary_coin() -> void:
 func _take_legendary() -> void:
 	if GameState.has_achievement(&"legendary_coin"):
 		return
-	GameState.ledger.money_cents += 1
-	GameState.economy_changed.emit()
+	EasterEggKit.give_cents(1)
 	GameState.notify("A moeda lendária de 1 centavo! Agora só faltam 133.999.999.")
 	GameState.unlock(&"legendary_coin")
 	_legendary.queue_free()
@@ -104,9 +102,9 @@ func _build_newspapers() -> void:
 		var hub: Dictionary = layout.hubs[i]
 		var deposit: Vector3 = hub.deposit
 		var at := deposit + Vector3(-2.4, 0, 0.3)
-		var paper := _interactive("Newspaper_%d" % i, at, Vector3(0.5, 0.25, 0.4), "Ler o jornal", _read_paper.bind(i))
-		_box(paper, Vector3(0.48, 0.16, 0.34), Vector3(0, 0.08, 0), _material(Color(0.88, 0.86, 0.8)))
-		_box(paper, Vector3(0.4, 0.01, 0.07), Vector3(0, 0.165, -0.1), _material(Color(0.15, 0.15, 0.15)))
+		var paper := EasterEggKit.interactive(self, "Newspaper_%d" % i, at, Vector3(0.5, 0.25, 0.4), "Ler o jornal", _read_paper.bind(i))
+		EasterEggKit.box(paper, Vector3(0.48, 0.16, 0.34), Vector3(0, 0.08, 0), EasterEggKit.material(Color(0.88, 0.86, 0.8)))
+		EasterEggKit.box(paper, Vector3(0.4, 0.01, 0.07), Vector3(0, 0.165, -0.1), EasterEggKit.material(Color(0.15, 0.15, 0.15)))
 
 
 func _read_paper(index: int) -> void:
@@ -134,11 +132,11 @@ func _build_posters() -> void:
 			poster.position = Vector3(x, 0, z)
 			poster.rotation.y = 0.0 if north else PI
 			add_child(poster)
-			_box(poster, Vector3(6.0, 3.2, 0.08), Vector3(0, 3.0, 0.04), _material(party[3]))
-			_box(poster, Vector3(6.2, 0.15, 0.1), Vector3(0, 4.65, 0.05), _material(Color(0.95, 0.95, 0.92)))
-			_label(poster, "%s  %s" % [party[0], party[1]], Vector3(0, 4.15, 0.1), 0.0042, Color.WHITE)
-			_label(poster, party[2], Vector3(0, 2.85, 0.1), 0.0055, Color(1, 0.95, 0.6))
-			_label(poster, "VOTE %s" % party[0], Vector3(0, 1.75, 0.1), 0.004, Color.WHITE)
+			EasterEggKit.box(poster, Vector3(6.0, 3.2, 0.08), Vector3(0, 3.0, 0.04), EasterEggKit.material(party[3]))
+			EasterEggKit.box(poster, Vector3(6.2, 0.15, 0.1), Vector3(0, 4.65, 0.05), EasterEggKit.material(Color(0.95, 0.95, 0.92)))
+			EasterEggKit.label(poster, "%s  %s" % [party[0], party[1]], Vector3(0, 4.15, 0.1), 0.0042, Color.WHITE)
+			EasterEggKit.label(poster, party[2], Vector3(0, 2.85, 0.1), 0.0055, Color(1, 0.95, 0.6))
+			EasterEggKit.label(poster, "VOTE %s" % party[0], Vector3(0, 1.75, 0.1), 0.004, Color.WHITE)
 
 
 # --- Urna --------------------------------------------------------------------------------
@@ -148,19 +146,19 @@ func _build_ballot_box() -> void:
 	var lot := layout.lot_rect(Vector2i(19, 0))
 	var spot := lot.position + Vector2(3.0, 3.0)
 	var at := Vector3(spot.x, layout.ground_height(spot.x, spot.y), spot.y)
-	var urn := _interactive("BallotBox", at, Vector3(0.9, 1.3, 0.7), "Votar na urna das promessas", _vote)
+	var urn := EasterEggKit.interactive(self, "BallotBox", at, Vector3(0.9, 1.3, 0.7), "Votar na urna das promessas", _vote)
 	urn.rotation.y = PI * 0.25
-	_box(urn, Vector3(0.12, 0.8, 0.12), Vector3(0, 0.4, 0), _material(Color(0.3, 0.3, 0.32)))
-	_box(urn, Vector3(0.8, 0.45, 0.55), Vector3(0, 1.0, 0), _material(Color(0.85, 0.85, 0.82)))
-	_box(urn, Vector3(0.36, 0.22, 0.02), Vector3(-0.15, 1.08, 0.28), _material(Color(0.1, 0.25, 0.15)))
+	EasterEggKit.box(urn, Vector3(0.12, 0.8, 0.12), Vector3(0, 0.4, 0), EasterEggKit.material(Color(0.3, 0.3, 0.32)))
+	EasterEggKit.box(urn, Vector3(0.8, 0.45, 0.55), Vector3(0, 1.0, 0), EasterEggKit.material(Color(0.85, 0.85, 0.82)))
+	EasterEggKit.box(urn, Vector3(0.36, 0.22, 0.02), Vector3(-0.15, 1.08, 0.28), EasterEggKit.material(Color(0.1, 0.25, 0.15)))
 	for row in 3:
 		for column in 3:
-			_box(urn, Vector3(0.06, 0.04, 0.02), Vector3(0.12 + column * 0.08, 1.14 - row * 0.07, 0.28), _material(Color(0.15, 0.15, 0.15)))
-	_box(urn, Vector3(0.14, 0.05, 0.02), Vector3(0.2, 0.9, 0.28), _material(Color(0.2, 0.6, 0.25)))
+			EasterEggKit.box(urn, Vector3(0.06, 0.04, 0.02), Vector3(0.12 + column * 0.08, 1.14 - row * 0.07, 0.28), EasterEggKit.material(Color(0.15, 0.15, 0.15)))
+	EasterEggKit.box(urn, Vector3(0.14, 0.05, 0.02), Vector3(0.2, 0.9, 0.28), EasterEggKit.material(Color(0.2, 0.6, 0.25)))
 	# Entulho em volta (só enfeite).
-	var rubble := _material(Color(0.55, 0.5, 0.45))
+	var rubble := EasterEggKit.material(Color(0.55, 0.5, 0.45))
 	for offset: Vector3 in [Vector3(-0.9, 0.2, 0.3), Vector3(0.8, 0.15, -0.5), Vector3(-0.5, 0.12, -0.8)]:
-		_box(urn, Vector3(0.6, 0.4, 0.5), offset, rubble)
+		EasterEggKit.box(urn, Vector3(0.6, 0.4, 0.5), offset, rubble)
 
 
 func _vote() -> void:
@@ -180,35 +178,35 @@ func _build_cinema() -> void:
 	var wall := Node3D.new()
 	wall.position = Vector3(x, 0, -layout.half_z + 0.06)
 	add_child(wall)
-	_box(wall, Vector3(9.0, 5.0, 0.1), Vector3(0, 3.3, 0.05), _material(Color(0.32, 0.22, 0.45)))
-	_box(wall, Vector3(9.3, 0.18, 0.12), Vector3(0, 5.85, 0.06), _material(GOLD))
-	_label(wall, "DARK HORSE", Vector3(0, 5.1, 0.12), 0.012, GOLD)
-	_label(wall, "THE UNTOLD BUDGET", Vector3(0, 4.45, 0.12), 0.0055, Color(0.95, 0.9, 0.8))
-	_label(wall, "ESTREIA EM BREVE", Vector3(0, 1.3, 0.12), 0.006, Color(1, 0.4, 0.35))
+	EasterEggKit.box(wall, Vector3(9.0, 5.0, 0.1), Vector3(0, 3.3, 0.05), EasterEggKit.material(Color(0.32, 0.22, 0.45)))
+	EasterEggKit.box(wall, Vector3(9.3, 0.18, 0.12), Vector3(0, 5.85, 0.06), EasterEggKit.material(GOLD))
+	EasterEggKit.label(wall, "DARK HORSE", Vector3(0, 5.1, 0.12), 0.012, GOLD)
+	EasterEggKit.label(wall, "THE UNTOLD BUDGET", Vector3(0, 4.45, 0.12), 0.0055, Color(0.95, 0.9, 0.8))
+	EasterEggKit.label(wall, "ESTREIA EM BREVE", Vector3(0, 1.3, 0.12), 0.006, Color(1, 0.4, 0.35))
 	_horse(wall, Vector3(0, 2.2, 0.15))
-	_box(wall, Vector3(4.2, 0.9, 0.06), Vector3(-6.8, 1.6, 0.03), _material(Color(0.85, 0.82, 0.74)))
-	_label(wall, "100% do orçamento destinado à produção.\nO orçamento da prestação de\ncontas não está incluído.", Vector3(-6.8, 1.6, 0.08), 0.0028, Color(0.15, 0.12, 0.1))
-	var machine := _interactive("Popcorn", Vector3(x + 6.0, 0.0, -layout.half_z + 1.2), Vector3(0.8, 1.6, 0.7),
+	EasterEggKit.box(wall, Vector3(4.2, 0.9, 0.06), Vector3(-6.8, 1.6, 0.03), EasterEggKit.material(Color(0.85, 0.82, 0.74)))
+	EasterEggKit.label(wall, "100% do orçamento destinado à produção.\nO orçamento da prestação de\ncontas não está incluído.", Vector3(-6.8, 1.6, 0.08), 0.0028, Color(0.15, 0.12, 0.1))
+	var machine := EasterEggKit.interactive(self, "Popcorn", Vector3(x + 6.0, 0.0, -layout.half_z + 1.2), Vector3(0.8, 1.6, 0.7),
 		"Comprar pipoca (R$ 0,01)", _buy_popcorn)
-	_box(machine, Vector3(0.7, 0.8, 0.6), Vector3(0, 0.4, 0), _material(Color(0.8, 0.12, 0.1)))
-	var glass := _material(Color(0.8, 0.9, 1.0, 0.35))
+	EasterEggKit.box(machine, Vector3(0.7, 0.8, 0.6), Vector3(0, 0.4, 0), EasterEggKit.material(Color(0.8, 0.12, 0.1)))
+	var glass := EasterEggKit.material(Color(0.8, 0.9, 1.0, 0.35))
 	glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	_box(machine, Vector3(0.66, 0.6, 0.56), Vector3(0, 1.1, 0), glass)
-	_box(machine, Vector3(0.56, 0.2, 0.46), Vector3(0, 0.9, 0), _material(Color(1, 0.95, 0.75)))
-	_box(machine, Vector3(0.74, 0.12, 0.64), Vector3(0, 1.46, 0), _material(Color(0.8, 0.12, 0.1)))
-	_label(machine, "SÓ 1 CENTAVO", Vector3(0, 0.55, 0.31), 0.0025, Color.WHITE)
+	EasterEggKit.box(machine, Vector3(0.66, 0.6, 0.56), Vector3(0, 1.1, 0), glass)
+	EasterEggKit.box(machine, Vector3(0.56, 0.2, 0.46), Vector3(0, 0.9, 0), EasterEggKit.material(Color(1, 0.95, 0.75)))
+	EasterEggKit.box(machine, Vector3(0.74, 0.12, 0.64), Vector3(0, 1.46, 0), EasterEggKit.material(Color(0.8, 0.12, 0.1)))
+	EasterEggKit.label(machine, "SÓ 1 CENTAVO", Vector3(0, 0.55, 0.31), 0.0025, Color.WHITE)
 
 
 ## Cavalo de sombra de gravata (caixas pretas e a gravata vermelha).
 func _horse(parent: Node3D, at: Vector3) -> void:
-	var black := _material(Color(0.02, 0.02, 0.03))
-	_box(parent, Vector3(1.8, 0.7, 0.05), at + Vector3(0, 0.3, 0), black)
-	_box(parent, Vector3(0.35, 0.9, 0.05), at + Vector3(0.95, 0.8, 0), black)
-	_box(parent, Vector3(0.7, 0.3, 0.05), at + Vector3(1.25, 1.2, 0), black)
+	var black := EasterEggKit.material(Color(0.02, 0.02, 0.03))
+	EasterEggKit.box(parent, Vector3(1.8, 0.7, 0.05), at + Vector3(0, 0.3, 0), black)
+	EasterEggKit.box(parent, Vector3(0.35, 0.9, 0.05), at + Vector3(0.95, 0.8, 0), black)
+	EasterEggKit.box(parent, Vector3(0.7, 0.3, 0.05), at + Vector3(1.25, 1.2, 0), black)
 	for leg: float in [-0.7, -0.4, 0.45, 0.75]:
-		_box(parent, Vector3(0.14, 0.8, 0.05), at + Vector3(leg, -0.4, 0), black)
-	_box(parent, Vector3(0.2, 0.08, 0.05), at + Vector3(-1.0, 0.45, 0), black)
-	_box(parent, Vector3(0.14, 0.45, 0.06), at + Vector3(1.0, 0.55, 0.02), _material(Color(0.85, 0.1, 0.12)))
+		EasterEggKit.box(parent, Vector3(0.14, 0.8, 0.05), at + Vector3(leg, -0.4, 0), black)
+	EasterEggKit.box(parent, Vector3(0.2, 0.08, 0.05), at + Vector3(-1.0, 0.45, 0), black)
+	EasterEggKit.box(parent, Vector3(0.14, 0.45, 0.06), at + Vector3(1.0, 0.55, 0.02), EasterEggKit.material(Color(0.85, 0.1, 0.12)))
 
 
 func _buy_popcorn() -> void:
@@ -224,20 +222,8 @@ func _buy_popcorn() -> void:
 
 ## O banqueiro de terno impecável que nunca responde. Larga um centavo e some para outro beco.
 func _build_mr_v() -> void:
-	_mr_v = _interactive("SenhorV", Vector3.ZERO, Vector3(0.6, 1.9, 0.5), "Perguntar ao Senhor V. sobre as moedas", _talk_mr_v)
-	var suit := _material(Color(0.1, 0.12, 0.2))
-	var skin := _material(Color(0.85, 0.68, 0.55))
-	for x: float in [-0.12, 0.12]:
-		_box(_mr_v, Vector3(0.16, 0.85, 0.2), Vector3(x, 0.43, 0), suit)
-	_box(_mr_v, Vector3(0.5, 0.7, 0.28), Vector3(0, 1.2, 0), suit)
-	_box(_mr_v, Vector3(0.14, 0.45, 0.02), Vector3(0, 1.3, 0.145), _material(Color(0.95, 0.95, 0.95)))
-	_box(_mr_v, Vector3(0.06, 0.38, 0.02), Vector3(0, 1.28, 0.157), _material(Color(0.75, 0.1, 0.12)))
-	for x: float in [-0.31, 0.31]:
-		_box(_mr_v, Vector3(0.12, 0.65, 0.18), Vector3(x, 1.18, 0), suit)
-	_box(_mr_v, Vector3(0.28, 0.32, 0.28), Vector3(0, 1.73, 0), skin)
-	_box(_mr_v, Vector3(0.3, 0.08, 0.3), Vector3(0, 1.91, -0.01), _material(Color(0.12, 0.1, 0.08)))
-	_box(_mr_v, Vector3(0.26, 0.06, 0.02), Vector3(0, 1.76, 0.145), _material(Color(0.02, 0.02, 0.02)))
-	_box(_mr_v, Vector3(0.12, 0.35, 0.45), Vector3(0.42, 0.75, 0), _material(Color(0.25, 0.15, 0.08)))
+	_mr_v = EasterEggKit.interactive(self, "SenhorV", Vector3.ZERO, Vector3(0.6, 1.9, 0.5), "Perguntar ao Senhor V. sobre as moedas", _talk_mr_v)
+	EasterEggKit.person(_mr_v, Color(0.1, 0.12, 0.2), Color(0.75, 0.1, 0.12))
 	_place_mr_v()
 
 
@@ -256,44 +242,16 @@ func _talk_mr_v() -> void:
 	var meetings := GameState.bump("mr_v")
 	if meetings <= EVASIONS.size():
 		GameState.notify("Senhor V.: “%s” (deixou cair um centavo)" % EVASIONS[meetings - 1])
-		GameState.ledger.money_cents += 1
-		GameState.economy_changed.emit()
+		EasterEggKit.give_cents(1)
 	else:
 		GameState.notify("Senhor V.: “Tenho uma melhoria para o seu ímã. É só assinar: 300 páginas. A página 1 diz ‘ver página 2’.”")
 		GameState.unlock(&"three_hundred_pages")
 	if meetings >= 3:
 		GameState.unlock(&"complex_structure")
-	_puff(_mr_v.global_position)
+	EasterEggKit.puff(self, _mr_v.global_position)
 	Sfx.play(&"whoosh", 0.0, -6.0)
 	_place_mr_v()
 
-
-## Nuvem de fumaça cinza onde ele estava.
-func _puff(at: Vector3) -> void:
-	var smoke := CPUParticles3D.new()
-	smoke.one_shot = true
-	smoke.explosiveness = 0.9
-	smoke.amount = 24
-	smoke.lifetime = 0.9
-	smoke.local_coords = false
-	smoke.emission_shape = CPUParticles3D.EMISSION_SHAPE_SPHERE
-	smoke.emission_sphere_radius = 0.4
-	smoke.direction = Vector3.UP
-	smoke.spread = 80.0
-	smoke.initial_velocity_min = 0.5
-	smoke.initial_velocity_max = 1.4
-	smoke.gravity = Vector3(0, 0.5, 0)
-	var puff := SphereMesh.new()
-	puff.radius = 0.18
-	puff.height = 0.36
-	puff.radial_segments = 6
-	puff.rings = 3
-	puff.material = _material(Color(0.7, 0.7, 0.72, 0.8))
-	smoke.mesh = puff
-	add_child(smoke)
-	smoke.global_position = at + Vector3.UP * 1.0
-	smoke.emitting = true
-	smoke.finished.connect(smoke.queue_free)
 
 
 # --- Utilidades --------------------------------------------------------------------------
@@ -305,25 +263,6 @@ func _process(delta: float) -> void:
 				(child as Node3D).rotate_y(delta * 1.5)
 
 
-## Corpo físico que o jogador não atravessa e com o qual interage (E).
-func _interactive(node_name: String, at: Vector3, size: Vector3, prompt: String, action: Callable) -> StaticBody3D:
-	var body := StaticBody3D.new()
-	body.name = node_name
-	body.collision_layer = 3
-	body.position = at
-	add_child(body)
-	var shape := BoxShape3D.new()
-	shape.size = size
-	var collision := CollisionShape3D.new()
-	collision.shape = shape
-	collision.position.y = size.y * 0.5
-	body.add_child(collision)
-	var interactable := Interactable.new()
-	interactable.prompt_text = prompt
-	interactable.interacted.connect(func(_by: Node) -> void: action.call())
-	body.add_child(interactable)
-	return body
-
 
 func _landmark(kind: StringName) -> Dictionary:
 	for landmark in layout.landmarks:
@@ -331,32 +270,3 @@ func _landmark(kind: StringName) -> Dictionary:
 			return landmark
 	return {}
 
-
-static func _box(parent: Node3D, size: Vector3, at: Vector3, material: Material) -> void:
-	var mesh := BoxMesh.new()
-	mesh.size = size
-	mesh.material = material
-	var instance := MeshInstance3D.new()
-	instance.mesh = mesh
-	instance.position = at
-	parent.add_child(instance)
-
-
-static func _label(parent: Node3D, text: String, at: Vector3, pixel: float, color: Color) -> void:
-	var label := Label3D.new()
-	label.text = text
-	label.font_size = FONT_SIZE
-	label.outline_size = 8
-	label.pixel_size = pixel
-	label.modulate = color
-	label.position = at
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.visibility_range_end = 250.0
-	parent.add_child(label)
-
-
-static func _material(color: Color) -> StandardMaterial3D:
-	var material := StandardMaterial3D.new()
-	material.albedo_color = color
-	material.roughness = 0.8
-	return material

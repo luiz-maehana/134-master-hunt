@@ -204,6 +204,34 @@ func test_easter_eggs() -> void:
 	GameState.extras = extras_before
 
 
+func test_escape_easter_eggs() -> void:
+	var escape := city.get_node("EscapeEasterEggs") as EscapeEasterEggs
+	var extras_before := GameState.extras.duplicate(true)
+	var money := GameState.ledger.money_cents
+	var use := func(path: String) -> void:
+		Interactable.find_on(escape.get_node(path)).interact(player)
+	use.call("Airport/DeparturesBoard")
+	use.call("Airport/CheckIn")
+	use.call("Airport/Politician")
+	use.call("Airport/PassportBin")
+	check(GameState.has_achievement(&"not_in_system"), "aeroporto: passaporte na lixeira")
+	for i in EscapeEasterEggs.SUITCASES:
+		use.call("Escape/HiddenCase_%d" % i)
+	use.call("Escape/HiddenCase_0")
+	check(GameState.has_achievement(&"investigative_tourism"), "fuga: três malas abertas")
+	for i in EscapeEasterEggs.TELLER.size() + 1:
+		use.call("Bank/Teller")
+	check(GameState.has_achievement(&"unavailable_balance"), "banco: saldo indisponível")
+	use.call("Studio/DressingRoom")
+	use.call("Studio/DressingRoom")
+	use.call("Studio/Producer")
+	check(GameState.has_achievement(&"almost_done"), "produtora: quase pronto")
+	# Passaporte, três malas e o camarim: 5 centavos, cada achado uma vez só.
+	check_eq(GameState.ledger.money_cents, money + 5, "cada achado dá 1 centavo uma única vez")
+	check_eq(world.remaining_total() + GameState.world_removed_value, world.definition.total_value_cents, "total do mundo intacto")
+	GameState.extras = extras_before
+
+
 func test_hands_take_one_coin() -> void:
 	var pile := await _stand_south_of_pile(1)
 	if pile.is_empty():
