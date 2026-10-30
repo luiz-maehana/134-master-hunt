@@ -1,0 +1,115 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/tools/magnet_rod_tool.gd" id="1_rod"]
+[ext_resource type="PackedScene" path="res://assets/third_party/quaternius/fishing_rod.glb" id="9_model"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_cork"]
+albedo_color = Color(0.62, 0.45, 0.28, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_blank"]
+albedo_color = Color(0.12, 0.12, 0.14, 1)
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_reel"]
+albedo_color = Color(0.25, 0.45, 0.85, 1)
+metallic = 0.6
+roughness = 0.4
+
+[sub_resource type="StandardMaterial3D" id="Mat_red"]
+albedo_color = Color(0.82, 0.1, 0.1, 1)
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="Mat_steel"]
+albedo_color = Color(0.85, 0.86, 0.88, 1)
+metallic = 0.9
+roughness = 0.3
+
+[sub_resource type="CylinderMesh" id="Mesh_handle"]
+material = SubResource("Mat_cork")
+top_radius = 0.016
+bottom_radius = 0.018
+height = 0.26
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_blank"]
+material = SubResource("Mat_blank")
+top_radius = 0.003
+bottom_radius = 0.01
+height = 0.95
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_reel"]
+material = SubResource("Mat_reel")
+top_radius = 0.034
+bottom_radius = 0.034
+height = 0.035
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_body"]
+material = SubResource("Mat_red")
+top_radius = 0.06
+bottom_radius = 0.07
+height = 0.05
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_face"]
+material = SubResource("Mat_steel")
+top_radius = 0.072
+bottom_radius = 0.072
+height = 0.012
+radial_segments = 12
+rings = 1
+
+[sub_resource type="TorusMesh" id="Mesh_eye"]
+material = SubResource("Mat_steel")
+inner_radius = 0.012
+outer_radius = 0.02
+rings = 8
+ring_segments = 6
+
+[node name="MagnetRodTool" type="Node3D"]
+script = ExtResource("1_rod")
+
+[node name="Rod" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 0.12)
+
+[node name="Model" parent="Rod" instance=ExtResource("9_model")]
+transform = Transform3D(0.154, 0, 0, 0, 0, 0.154, 0, -0.154, 0, 0, 0, 0)
+
+[node name="Tip" type="Node3D" parent="Rod"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.07)
+
+[node name="Magnet" type="Node3D" parent="."]
+top_level = true
+
+[node name="Body" type="MeshInstance3D" parent="Magnet"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0)
+mesh = SubResource("Mesh_body")
+
+[node name="Face" type="MeshInstance3D" parent="Magnet"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.006, 0)
+mesh = SubResource("Mesh_face")
+
+[node name="Eye" type="MeshInstance3D" parent="Magnet"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.066, 0)
+mesh = SubResource("Mesh_eye")
+
+[node name="Stuck" type="MultiMeshInstance3D" parent="Magnet"]
+
+[node name="Line" type="MeshInstance3D" parent="."]
+top_level = true
+cast_shadow = 0
+
+[node name="Preview" type="MeshInstance3D" parent="."]
+top_level = true
+cast_shadow = 0
+
+[node name="Ring" type="MeshInstance3D" parent="."]
+top_level = true
+visible = false
+cast_shadow = 0

@@ -1,0 +1,51 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/deposit_point.gd" id="1_deposit"]
+[ext_resource type="Script" path="res://scripts/interaction/interactable.gd" id="2_interactable"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_body"]
+albedo_color = Color(0.16, 0.45, 0.24, 1)
+metallic = 0.5
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="Mat_slot"]
+albedo_color = Color(0.05, 0.05, 0.05, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_body"]
+material = SubResource("Mat_body")
+size = Vector3(1.2, 1.4, 0.9)
+
+[sub_resource type="BoxMesh" id="Mesh_slot"]
+material = SubResource("Mat_slot")
+size = Vector3(0.4, 0.04, 0.02)
+
+[sub_resource type="BoxShape3D" id="Shape_body"]
+size = Vector3(1.2, 1.4, 0.9)
+
+[node name="DepositPoint" type="StaticBody3D"]
+collision_layer = 3
+script = ExtResource("1_deposit")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+mesh = SubResource("Mesh_body")
+
+[node name="Slot" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38, 0.46)
+mesh = SubResource("Mesh_slot")
+
+[node name="Sign" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0.46)
+pixel_size = 0.004
+text = "PONTO DE
+COLETA"
+font_size = 48
+outline_size = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+shape = SubResource("Shape_body")
+
+[node name="Interactable" type="Node" parent="."]
+script = ExtResource("2_interactable")
+prompt_text = "Ponto de coleta"

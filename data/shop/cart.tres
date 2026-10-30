@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/shop/upgrade_definition.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+id = &"cart"
+display_name = "Carrinho de transporte"
+description = "Carrinho de feira com rodinhas que rangem. Transporta muita moeda."
+price_cents = 200000
+requires = Array[StringName]([&"backpack"])
+required_value_cents = 400000
+effect = 0
+amount = 30000.0
+tool_group = &""
+tool_stat_bonus = {}

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/shop/upgrade_definition.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+id = &"flashlight_helmet"
+display_name = "Holofote de capacete"
+description = "Holofote de obra preso no capacete. Transforma a noite em dia num raio enorme."
+price_cents = 45000000
+requires = Array[StringName]([&"flashlight_tactical"])
+required_value_cents = 55000000
+effect = 5
+amount = 42.0
+tool_group = &""
+tool_stat_bonus = {}

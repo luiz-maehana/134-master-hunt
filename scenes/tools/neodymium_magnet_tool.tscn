@@ -1,0 +1,52 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/tools/magnet_tool.gd" id="1_magnet"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_nickel"]
+albedo_color = Color(0.78, 0.8, 0.83, 1)
+metallic = 0.45
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="Mat_core"]
+albedo_color = Color(0.4, 0.41, 0.44, 1)
+metallic = 0.4
+roughness = 0.45
+
+[sub_resource type="CylinderMesh" id="Mesh_disc"]
+material = SubResource("Mat_nickel")
+top_radius = 0.06
+bottom_radius = 0.06
+height = 0.022
+radial_segments = 24
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_core"]
+material = SubResource("Mat_core")
+top_radius = 0.018
+bottom_radius = 0.018
+height = 0.074
+radial_segments = 12
+rings = 1
+
+[node name="MagnetTool" type="Node3D"]
+script = ExtResource("1_magnet")
+
+[node name="Magnet" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.94, 0.342, 0, -0.342, 0.94, -0.04, 0.05, -0.26)
+
+[node name="Discs" type="Node3D" parent="Magnet"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0)
+
+[node name="Disc1" type="MeshInstance3D" parent="Magnet/Discs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.025, 0)
+mesh = SubResource("Mesh_disc")
+
+[node name="Disc2" type="MeshInstance3D" parent="Magnet/Discs"]
+mesh = SubResource("Mesh_disc")
+
+[node name="Disc3" type="MeshInstance3D" parent="Magnet/Discs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0)
+mesh = SubResource("Mesh_disc")
+
+[node name="Core" type="MeshInstance3D" parent="Magnet/Discs"]
+mesh = SubResource("Mesh_core")

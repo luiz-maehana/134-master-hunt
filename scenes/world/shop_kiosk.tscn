@@ -1,0 +1,81 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/shop_kiosk.gd" id="1_kiosk"]
+[ext_resource type="Script" path="res://scripts/interaction/interactable.gd" id="2_interactable"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_counter"]
+albedo_color = Color(0.2, 0.32, 0.6, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_top"]
+albedo_color = Color(0.85, 0.82, 0.75, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_awning"]
+albedo_color = Color(0.9, 0.55, 0.1, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_post"]
+albedo_color = Color(0.3, 0.3, 0.32, 1)
+metallic = 0.6
+
+[sub_resource type="BoxMesh" id="Mesh_counter"]
+material = SubResource("Mat_counter")
+size = Vector3(1.6, 1.0, 0.7)
+
+[sub_resource type="BoxMesh" id="Mesh_top"]
+material = SubResource("Mat_top")
+size = Vector3(1.7, 0.05, 0.8)
+
+[sub_resource type="BoxMesh" id="Mesh_awning"]
+material = SubResource("Mat_awning")
+size = Vector3(1.9, 0.06, 1.1)
+
+[sub_resource type="CylinderMesh" id="Mesh_post"]
+material = SubResource("Mat_post")
+top_radius = 0.03
+bottom_radius = 0.03
+height = 2.3
+radial_segments = 8
+rings = 1
+
+[sub_resource type="BoxShape3D" id="Shape_counter"]
+size = Vector3(1.6, 1.05, 0.7)
+
+[node name="ShopKiosk" type="StaticBody3D"]
+collision_layer = 3
+script = ExtResource("1_kiosk")
+
+[node name="Counter" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("Mesh_counter")
+
+[node name="Top" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.025, 0.05)
+mesh = SubResource("Mesh_top")
+
+[node name="Awning" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.966, 0.259, 0, -0.259, 0.966, 0, 2.3, 0.15)
+mesh = SubResource("Mesh_awning")
+
+[node name="PostLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85, 1.15, -0.3)
+mesh = SubResource("Mesh_post")
+
+[node name="PostRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 1.15, -0.3)
+mesh = SubResource("Mesh_post")
+
+[node name="Sign" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.65, 0.1)
+pixel_size = 0.004
+text = "FERRAGEM DO SEU ZÉ
+luvas · pás · ímãs · varas · licenças"
+font_size = 48
+outline_size = 8
+modulate = Color(1, 0.9, 0.6, 1)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.525, 0)
+shape = SubResource("Shape_counter")
+
+[node name="Interactable" type="Node" parent="."]
+script = ExtResource("2_interactable")
+prompt_text = "Abrir a loja"

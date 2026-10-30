@@ -1,0 +1,21 @@
+# Normaliza finais de linha em texto para LF.
+* text=auto eol=lf
+
+# Binários comuns em projetos Godot.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.exr binary
+*.hdr binary
+*.glb binary
+*.gltf text
+*.bin binary
+*.fbx binary
+*.blend binary
+*.ogg binary
+*.wav binary
+*.mp3 binary
+*.ttf binary
+*.otf binary
+*.res binary

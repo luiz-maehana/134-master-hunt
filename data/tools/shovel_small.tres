@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ToolDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/tools/tool_definition.gd" id="1_def"]
+[ext_resource type="PackedScene" path="res://scenes/tools/shovel_tool.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"shovel_small"
+display_name = "Pá pequena"
+description = "Pá de jardinagem. Recolhe os montinhos bem na sua frente, várias pilhas por pazada."
+price_cents = 17500
+requires = Array[StringName]([])
+required_value_cents = 0
+kind = 1
+slot_group = &"shovel"
+reach = 1.4
+use_time = 0.9
+area_radius = 1.2
+capacity = 200
+power = 2.0
+scene = ExtResource("2_scene")
+visual_scale = 0.8

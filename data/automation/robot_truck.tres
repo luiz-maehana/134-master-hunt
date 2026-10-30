@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="RobotDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/automation/robot_definition.gd" id="1_robot"]
+
+[resource]
+script = ExtResource("1_robot")
+id = &"robot_truck"
+display_name = "Aspirador gigante"
+description = "Um aspirador robô do tamanho de um carro. Suga quarteirões inteiros da Esplanada."
+price_cents = 1350000000
+requires = Array[StringName]([&"robot_tractor", &"permit_industrial"])
+required_value_cents = 150000000
+rate = 110.0
+radius = 24.0
+units = 4
+price_growth = 1.9
+body_color = Color(0.3, 0.55, 0.9, 1)
+visual_scale = 3.5
+move_speed = 3.5

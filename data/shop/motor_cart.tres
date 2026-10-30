@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/shop/upgrade_definition.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+id = &"motor_cart"
+display_name = "Carrinho motorizado"
+description = "Carrinho com motor de cortador de grama. Leva muito mais moeda por viagem."
+price_cents = 2500000
+requires = Array[StringName]([&"cart"])
+required_value_cents = 6000000
+effect = 0
+amount = 120000.0
+tool_group = &""
+tool_stat_bonus = {}

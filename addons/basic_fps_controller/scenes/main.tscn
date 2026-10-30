@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://7nvcdrofb2rx"]
+
+[ext_resource type="PackedScene" uid="uid://pmjfxhatvbbr" path="res://addons/basic_fps_controller/scenes/map.tscn" id="1_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://c66avr6vuxl0s" path="res://addons/basic_fps_controller/scenes/fps_controller.tscn" id="2_h2yge"]
+
+[node name="Main" type="Node3D" unique_id=555148787]
+
+[node name="Map" parent="." unique_id=62777768 instance=ExtResource("1_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.7270794)
+
+[node name="FPSController" parent="." unique_id=943687755 instance=ExtResource("2_h2yge")]

@@ -1,0 +1,400 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_hud"]
+[ext_resource type="Script" path="res://scripts/ui/tool_hotbar.gd" id="2_hotbar"]
+[ext_resource type="Script" path="res://scripts/ui/direction_arrow.gd" id="3_arrow"]
+[ext_resource type="Texture2D" path="res://assets/ui/coin_icon.png" id="9_coin_icon"]
+[ext_resource type="Texture2D" path="res://assets/third_party/kenney/game-icons/trophy.png" id="10_trophy"]
+[ext_resource type="Script" path="res://scripts/ui/sky_icon.gd" id="11_sky_icon"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+[node name="Left" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(380, 0)
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 404.0
+offset_bottom = 24.0
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Stats" type="PanelContainer" parent="Left"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"Card"
+
+[node name="VBox" type="VBoxContainer" parent="Left/Stats"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Caption" type="Label" parent="Left/Stats/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.78, 0.2, 1)
+theme_override_font_sizes/font_size = 16
+text = "META"
+
+[node name="CoinsRow" type="HBoxContainer" parent="Left/Stats/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CoinIcon" type="TextureRect" parent="Left/Stats/VBox/CoinsRow"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("9_coin_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Coins" type="Label" parent="Left/Stats/VBox/CoinsRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "R$ 0,00"
+
+[node name="GoalBar" type="ProgressBar" parent="Left/Stats/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"BarGold"
+max_value = 1.0
+step = 0.0
+show_percentage = false
+
+[node name="ProgressRow" type="HBoxContainer" parent="Left/Stats/VBox"]
+layout_mode = 2
+
+[node name="Goal" type="Label" parent="Left/Stats/VBox/ProgressRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.72, 0.72, 0.72, 1)
+theme_override_font_sizes/font_size = 16
+text = "de R$ 134 milhões"
+
+[node name="Progress" type="Label" parent="Left/Stats/VBox/ProgressRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 1)
+theme_override_font_sizes/font_size = 18
+text = "0,000000%"
+horizontal_alignment = 2
+
+[node name="Separator" type="HSeparator" parent="Left/Stats/VBox"]
+layout_mode = 2
+
+[node name="MilestoneRow" type="HBoxContainer" parent="Left/Stats/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TrophyIcon" type="TextureRect" parent="Left/Stats/VBox/MilestoneRow"]
+modulate = Color(0.95, 0.7, 0.5, 1)
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("10_trophy")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Milestone" type="Label" parent="Left/Stats/VBox/MilestoneRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.7, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+text = "Próximo marco: R$ 1,00"
+
+[node name="Value" type="Label" parent="Left/Stats/VBox/MilestoneRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 16
+text = "0 moedas"
+horizontal_alignment = 2
+
+[node name="MilestoneBar" type="ProgressBar" parent="Left/Stats/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 7)
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"BarCopper"
+max_value = 1.0
+step = 0.0
+show_percentage = false
+
+[node name="Wallet" type="PanelContainer" parent="Left"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"Card"
+
+[node name="VBox" type="VBoxContainer" parent="Left/Wallet"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Caption" type="Label" parent="Left/Wallet/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.95, 0.55, 1)
+theme_override_font_sizes/font_size = 16
+text = "CARTEIRA · para gastar na Ferragem"
+
+[node name="Money" type="Label" parent="Left/Wallet/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.95, 0.55, 1)
+theme_override_font_sizes/font_size = 30
+text = "R$ 0,00"
+
+[node name="Robots" type="Label" parent="Left/Wallet/VBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.75, 0.3, 1)
+theme_override_font_sizes/font_size = 16
+text = "Robôs: 0"
+
+[node name="Gear" type="PanelContainer" parent="Left"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"Card"
+
+[node name="VBox" type="VBoxContainer" parent="Left/Gear"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="EquipmentTitle" type="Label" parent="Left/Gear/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.72, 1)
+theme_override_font_sizes/font_size = 16
+text = "EQUIPAMENTOS"
+
+[node name="Equipment" type="HFlowContainer" parent="Left/Gear/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 4
+
+[node name="Clock" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -80.0
+offset_top = 24.0
+offset_right = 80.0
+offset_bottom = 72.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_type_variation = &"Pill"
+
+[node name="Row" type="HBoxContainer" parent="Clock"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 8
+
+[node name="Sky" type="Control" parent="Clock/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_vertical = 4
+script = ExtResource("11_sky_icon")
+
+[node name="Time" type="Label" parent="Clock/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "07:12"
+
+[node name="Status" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(340, 0)
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -364.0
+offset_top = -24.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_type_variation = &"Card"
+
+[node name="VBox" type="VBoxContainer" parent="Status"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="PocketRow" type="HBoxContainer" parent="Status/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Gain" type="Label" parent="Status/VBox/PocketRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.85, 0.35, 1)
+theme_override_font_sizes/font_size = 22
+modulate = Color(1, 1, 1, 0)
+
+[node name="Pocket" type="Label" parent="Status/VBox/PocketRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Bolso: 0 / 100 moedas"
+horizontal_alignment = 2
+
+[node name="PocketBar" type="ProgressBar" parent="Status/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"BarGood"
+max_value = 1.0
+step = 0.0
+show_percentage = false
+
+[node name="DepositRow" type="HBoxContainer" parent="Status/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="Deposit" type="Label" parent="Status/VBox/DepositRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 1, 0.55, 1)
+theme_override_font_sizes/font_size = 19
+text = "Ponto de coleta: 0 m"
+horizontal_alignment = 2
+
+[node name="DepositArrow" type="Control" parent="Status/VBox/DepositRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("3_arrow")
+
+[node name="District" type="Label" parent="Status/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 19
+text = "Rodoviária · 0,0% recolhido"
+horizontal_alignment = 2
+
+[node name="DistrictBar" type="ProgressBar" parent="Status/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 7)
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"BarSky"
+max_value = 1.0
+step = 0.0
+show_percentage = false
+
+[node name="Help" type="Label" parent="Status/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 16
+text = "1-4 / roda: trocar   ·   Tab: inventário   ·   Esc: pausa"
+horizontal_alignment = 2
+
+[node name="DistrictBanner" type="Label" parent="."]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -380.0
+offset_top = 90.0
+offset_right = 380.0
+offset_bottom = 240.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 0.92, 0.7, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 48
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HintPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = -196.0
+offset_bottom = -150.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_type_variation = &"Pill"
+
+[node name="Hint" type="Label" parent="HintPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Hotbar" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -620.0
+offset_top = -124.0
+offset_right = 620.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+script = ExtResource("2_hotbar")
+
+[node name="Toasts" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = -664.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = 24.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Victory" type="CenterContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="Victory"]
+layout_mode = 2
+theme_type_variation = &"WindowGold"
+
+[node name="Text" type="Label" parent="Victory/Panel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1

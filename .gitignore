@@ -1,0 +1,55 @@
+# Repositório PÚBLICO: nada sensível deve ser versionado.
+# Antes de cada commit, revise `git status` e `git diff --cached`.
+
+# --- Godot: cache do editor e importações (contém caminhos absolutos da máquina) ---
+.godot/
+/android/
+
+# --- Exportação ---
+# export_presets.cfg ENTRA no repositório (a publicação automática usa), revisado: nunca
+# coloque nele senha de keystore, chave de criptografia nem caminho da máquina.
+# tools/check_publish.sh confere.
+export_credentials.cfg
+/build/
+/builds/
+/export/
+*.pck
+*.apk
+*.aab
+*.exe
+
+# --- Segredos e credenciais ---
+.env
+.env.*
+!.env.example
+*.keystore
+*.jks
+*.p12
+*.pfx
+*.pem
+*.key
+*.cer
+*credentials*
+*secret*
+
+# --- Downloads temporários de assets (avaliar antes de mover para o projeto) ---
+/_downloads/
+/_vendor_tmp/
+
+# --- Mono/C# (caso venha a ser usado) ---
+.mono/
+data_*/
+mono_crash.*.json
+
+# --- Sistema operacional / editores ---
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+*.swp
+*~
+.vscode/
+.idea/
+
+# --- Configurações locais do Claude Code ---
+.claude/settings.local.json

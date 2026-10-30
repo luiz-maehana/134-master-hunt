@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/shop/upgrade_definition.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+id = &"robot_batteries"
+display_name = "Baterias de lítio"
+description = "Troca as baterias de chumbo dos robôs. Eles trabalham mais rápido."
+price_cents = 5000000
+requires = Array[StringName]([&"robot_small"])
+required_value_cents = 6000000
+effect = 4
+amount = 0.5
+tool_group = &""
+tool_stat_bonus = {}

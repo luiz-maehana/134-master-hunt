@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/shop/upgrade_definition.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+id = &"permit_industrial"
+display_name = "Licença: Congresso Nacional"
+description = "Libera o Congresso Nacional e a Praça dos Três Poderes: o metro quadrado mais rico da cidade, quase só moedas de R$ 1."
+price_cents = 45000000
+required_value_cents = 600000000
+effect = 3
+district_id = &"industrial"

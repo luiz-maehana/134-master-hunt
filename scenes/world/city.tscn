@@ -1,0 +1,55 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/city_builder.gd" id="1_city"]
+[ext_resource type="Script" path="res://scripts/coins/coin_world.gd" id="2_coins"]
+[ext_resource type="Resource" path="res://data/world/city.tres" id="3_world"]
+
+[sub_resource type="ProceduralSkyMaterial" id="Sky_material"]
+sky_top_color = Color(0.22, 0.42, 0.78, 1)
+sky_horizon_color = Color(0.86, 0.8, 0.7, 1)
+sky_curve = 0.12
+sun_angle_max = 20.0
+ground_horizon_color = Color(0.86, 0.8, 0.7, 1)
+ground_bottom_color = Color(0.25, 0.23, 0.22, 1)
+
+[sub_resource type="Sky" id="Sky_main"]
+sky_material = SubResource("Sky_material")
+
+[sub_resource type="Environment" id="Environment_main"]
+background_mode = 2
+sky = SubResource("Sky_main")
+ambient_light_source = 3
+tonemap_mode = 2
+tonemap_white = 6.0
+ssao_enabled = true
+ssao_radius = 0.6
+ssao_intensity = 1.6
+glow_enabled = true
+glow_intensity = 0.35
+glow_bloom = 0.04
+adjustment_enabled = true
+adjustment_saturation = 1.08
+fog_enabled = true
+fog_light_color = Color(0.84, 0.8, 0.74, 1)
+fog_sun_scatter = 0.2
+fog_density = 0.0022
+fog_sky_affect = 0.25
+
+[node name="City" type="Node3D"]
+script = ExtResource("1_city")
+definition = ExtResource("3_world")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_main")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.354, 0.354, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 30, 0)
+shadow_enabled = true
+light_color = Color(1, 0.93, 0.8, 1)
+light_energy = 1.25
+shadow_blur = 1.5
+directional_shadow_max_distance = 120.0
+
+[node name="CoinWorld" type="Node3D" parent="."]
+script = ExtResource("2_coins")
+definition = ExtResource("3_world")

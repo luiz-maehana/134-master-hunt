@@ -1,0 +1,47 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://addons/basic_fps_controller/scenes/fps_controller.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scripts/player/player_controller.gd" id="2_controller"]
+[ext_resource type="Script" path="res://scripts/interaction/interactor.gd" id="3_interactor"]
+[ext_resource type="Script" path="res://scripts/ui/interaction_prompt.gd" id="4_prompt"]
+[ext_resource type="Script" path="res://scripts/tools/tool_user.gd" id="5_tool_user"]
+
+[node name="Player" instance=ExtResource("1_base")]
+script = ExtResource("2_controller")
+debug = false
+
+[node name="MeshInstance3D" parent="."]
+visible = false
+
+[node name="Interactor" type="RayCast3D" parent="Head/Camera3D"]
+target_position = Vector3(0, 0, -2.5)
+collision_mask = 3
+script = ExtResource("3_interactor")
+
+[node name="ToolHolder" type="Node3D" parent="Head/Camera3D" node_paths=PackedStringArray("camera", "body")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.3, -0.45)
+script = ExtResource("5_tool_user")
+camera = NodePath("..")
+body = NodePath("../../..")
+
+[node name="InteractionPrompt" type="Label" parent="CanvasLayer/Crosshair" node_paths=PackedStringArray("interactor")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -500.0
+offset_top = -200.0
+offset_right = 500.0
+offset_bottom = -160.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 26
+theme_override_constants/outline_size = 6
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("4_prompt")
+interactor = NodePath("../../../Head/Camera3D/Interactor")

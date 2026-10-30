@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="RobotDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/automation/robot_definition.gd" id="1_robot"]
+
+[resource]
+script = ExtResource("1_robot")
+id = &"robot_small"
+display_name = "Robô aspirador"
+description = "Aspirador robô de casa, reprogramado para moedas. Deixe-o num lugar e ele limpa tudo ao redor sozinho."
+price_cents = 175000
+requires = Array[StringName]([&"cart"])
+required_value_cents = 400000
+rate = 20.0
+radius = 10.0
+units = 10
+price_growth = 1.25
+body_color = Color(1, 0.75, 0.15, 1)
+visual_scale = 1.0
+move_speed = 1.5

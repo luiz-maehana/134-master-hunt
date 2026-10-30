@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/shop/upgrade_definition.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+id = &"permit_downtown"
+display_name = "Licença: Setor Cultural"
+description = "Libera o Setor Cultural: Catedral, Museu, Teatro e as ruas em volta, com moedas de até 50 centavos."
+price_cents = 2500
+required_value_cents = 6000
+effect = 3
+district_id = &"downtown"

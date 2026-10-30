@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ToolDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/tools/tool_definition.gd" id="1_def"]
+[ext_resource type="PackedScene" path="res://scenes/tools/shovel_tool.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"shovel_large"
+display_name = "Pá grande"
+description = "Pá larga de quadra. Recolhe um pedaço inteiro de calçada de uma vez."
+price_cents = 3500000
+requires = Array[StringName]([&"shovel_medium"])
+required_value_cents = 10000000
+kind = 1
+slot_group = &"shovel"
+reach = 2.6
+use_time = 0.9
+area_radius = 2.5
+capacity = 3000
+power = 5.0
+scene = ExtResource("2_scene")
+visual_scale = 1.25
+upgraded_model = true

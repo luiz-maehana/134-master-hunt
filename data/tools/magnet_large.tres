@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ToolDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/tools/tool_definition.gd" id="1_def"]
+[ext_resource type="PackedScene" path="res://scenes/tools/magnet_tool.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"magnet_large"
+display_name = "Ímã grande"
+description = "Ímã de ferro-velho. Esvazia um quarteirão de moedas em poucos puxões."
+price_cents = 33000000
+requires = Array[StringName]([&"magnet_medium"])
+required_value_cents = 35000000
+kind = 2
+slot_group = &"magnet"
+reach = 12.0
+use_time = 1.0
+area_radius = 0.0
+capacity = 8000
+power = 9.0
+scene = ExtResource("2_scene")
+visual_scale = 1.3

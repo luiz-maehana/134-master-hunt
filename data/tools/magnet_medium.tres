@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ToolDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/tools/tool_definition.gd" id="1_def"]
+[ext_resource type="PackedScene" path="res://scenes/tools/magnet_tool.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"magnet_medium"
+display_name = "Ímã médio"
+description = "Ímã de alto-falante velho. Alcança longe e puxa milhares de moedas."
+price_cents = 1500000
+requires = Array[StringName]([&"magnet_small"])
+required_value_cents = 2000000
+kind = 2
+slot_group = &"magnet"
+reach = 7.0
+use_time = 1.0
+area_radius = 0.0
+capacity = 2000
+power = 6.0
+scene = ExtResource("2_scene")
+

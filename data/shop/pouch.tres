@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/shop/upgrade_definition.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+id = &"pouch"
+display_name = "Pochete"
+description = "Cabe mais moeda do que no bolso da calça. Bem mais."
+price_cents = 250
+requires = Array[StringName]([])
+effect = 0
+amount = 500.0
+tool_group = &""
+tool_stat_bonus = {}

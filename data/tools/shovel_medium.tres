@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ToolDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/tools/tool_definition.gd" id="1_def"]
+[ext_resource type="PackedScene" path="res://scenes/tools/shovel_tool.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"shovel_medium"
+display_name = "Pá média"
+description = "Pá de obra. Pazadas de centenas de moedas."
+price_cents = 100000
+requires = Array[StringName]([&"shovel_small"])
+required_value_cents = 250000
+kind = 1
+slot_group = &"shovel"
+reach = 1.9
+use_time = 0.85
+area_radius = 1.8
+capacity = 800
+power = 3.0
+scene = ExtResource("2_scene")
+upgraded_model = true
+

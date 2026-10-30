@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="ToolDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/tools/tool_definition.gd" id="1_def"]
+[ext_resource type="PackedScene" path="res://scenes/tools/magnet_rod_tool.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"magnet_rod_large"
+display_name = "Vara com ímã grande"
+description = "Vara de pesca oceânica com ímã de guindaste. Um arremesso enche o carrinho."
+price_cents = 135000000
+requires = Array[StringName]([&"magnet_rod_medium"])
+required_value_cents = 150000000
+kind = 3
+slot_group = &"magnet_rod"
+reach = 40.0
+use_time = 0.5
+area_radius = 7.0
+capacity = 15000
+power = 9.0
+reel_speed = 25.0
+scene = ExtResource("2_scene")
+tint = Color(0.85, 0.6, 0.15, 1)
+visual_scale = 1.5

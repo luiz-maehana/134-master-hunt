@@ -1,0 +1,420 @@
+[gd_scene format=3 uid="uid://pmjfxhatvbbr"]
+
+[ext_resource type="Texture2D" uid="uid://lqjn0v14tim1" path="res://addons/basic_fps_controller/assets/GodotPrototypeBlack512.png" id="1_f1aqg"]
+[ext_resource type="Texture2D" uid="uid://di5op2dfs64f0" path="res://addons/basic_fps_controller/assets/GodotPrototypeOrange512.png" id="2_fonjw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a0dt8"]
+albedo_texture = ExtResource("1_f1aqg")
+uv1_scale = Vector3(0.7, 0.7, 0.7)
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4hjbm"]
+albedo_texture = ExtResource("2_fonjw")
+uv1_scale = Vector3(0.7, 0.7, 0.7)
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_env"]
+sky_top_color = Color(0.76, 0.8, 0.86, 1)
+sky_horizon_color = Color(0.94, 0.94, 0.95, 1)
+sky_curve = 0.14
+ground_bottom_color = Color(0.62, 0.62, 0.64, 1)
+ground_horizon_color = Color(0.94, 0.94, 0.95, 1)
+ground_curve = 0.08
+
+[sub_resource type="Sky" id="Sky_4hjbm"]
+sky_material = SubResource("ProceduralSkyMaterial_env")
+
+[sub_resource type="Environment" id="Environment_lgq1i"]
+background_mode = 2
+background_color = Color(1, 1, 1, 1)
+background_energy_multiplier = 3.43
+sky = SubResource("Sky_4hjbm")
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.48
+reflected_light_source = 1
+tonemap_mode = 2
+ssao_enabled = true
+ssao_radius = 1.2
+ssao_intensity = 0.55
+
+[sub_resource type="Curve3D" id="Curve3D_tunnel"]
+bake_interval = 0.25
+_data = {
+"points": PackedVector3Array(0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 0, -16),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve3D" id="Curve3D_wallrun"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 17.3, 0, 0, 16, 0, -14, 0, 0, 0, 0, 0, 0, 32, 0, -28),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[node name="Map" type="Node3D" unique_id=866722732]
+
+[node name="Floor" type="CSGBox3D" parent="." unique_id=1175410950]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.644566, -25.01677, 36.90602)
+use_collision = true
+size = Vector3(500, 50, 500)
+material = SubResource("StandardMaterial3D_a0dt8")
+
+[node name="StartBlock" type="CSGBox3D" parent="." unique_id=1012281726]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+use_collision = true
+size = Vector3(2, 1, 2)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1148804900]
+transform = Transform3D(1, 0, 0, 0, -0.7931409, 0.60903835, 0, -0.60903835, -0.7931409, 0, 0, 0)
+light_energy = 0.85
+light_specular = 0.25
+shadow_enabled = true
+shadow_blur = 1.2
+directional_shadow_max_distance = 200.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1754343952]
+environment = SubResource("Environment_lgq1i")
+
+[node name="Obstacles" type="Node3D" parent="." unique_id=913636494]
+
+[node name="Jump1" type="CSGBox3D" parent="Obstacles" unique_id=1090718257]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.2, -8)
+use_collision = true
+size = Vector3(2.4, 0.4, 2.4)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="Jump2" type="CSGBox3D" parent="Obstacles" unique_id=996943578]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.4, -12)
+use_collision = true
+size = Vector3(2.4, 0.8, 2.4)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="Jump3" type="CSGBox3D" parent="Obstacles" unique_id=1983124321]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.6, -16)
+use_collision = true
+size = Vector3(2.4, 1.2, 2.4)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="Jump4" type="CSGBox3D" parent="Obstacles" unique_id=2051513165]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.85, -20.5)
+use_collision = true
+size = Vector3(3, 1.7, 3)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="RampShallow" type="CSGPolygon3D" parent="Obstacles" unique_id=819328372]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 5, -22, 0, -26)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 12, 2.4, 12, 0)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="RampMedium" type="CSGPolygon3D" parent="Obstacles" unique_id=944400464]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 4, 8, 0, -38)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 10, 3.6, 10, 0)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="RampSteep" type="CSGPolygon3D" parent="Obstacles" unique_id=342675305]
+transform = Transform3D(0, 0, 4, 0, 1, 0, -1, 0, 0, 12, 0, 30)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 8, 4.2, 8, 0)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="RampToPlatform" type="CSGPolygon3D" parent="Obstacles" unique_id=862299749]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 4, -18, 0, 20)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 10, 4.2, 10, 0)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="HighPlatform" type="CSGBox3D" parent="Obstacles" unique_id=74910972]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 4.45, 24)
+use_collision = true
+size = Vector3(6, 0.5, 6)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="Cube" type="CSGBox3D" parent="Obstacles" unique_id=1969822365]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 1, 0)
+use_collision = true
+size = Vector3(2, 2, 2)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="WideBlock" type="CSGBox3D" parent="Obstacles" unique_id=793721562]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.55, -4)
+use_collision = true
+size = Vector3(5, 1.1, 2)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="Tower" type="CSGBox3D" parent="Obstacles" unique_id=716210406]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 4, -22)
+use_collision = true
+size = Vector3(3, 8, 3)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="LowHurdle" type="CSGBox3D" parent="Obstacles" unique_id=1043978475]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.225, -32)
+use_collision = true
+size = Vector3(6, 0.45, 0.45)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="Barrier" type="CSGBox3D" parent="Obstacles" unique_id=66320998]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -26)
+use_collision = true
+size = Vector3(8, 1.2, 0.5)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="PlatformA" type="CSGBox3D" parent="Obstacles" unique_id=1772196819]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.85, 32)
+use_collision = true
+size = Vector3(4.5, 0.4, 4.5)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="PlatformB" type="CSGBox3D" parent="Obstacles" unique_id=2001178146]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.85, 40)
+use_collision = true
+size = Vector3(4.5, 0.4, 4.5)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="PillarA" type="CSGCylinder3D" parent="Obstacles" unique_id=374748700]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2, 12)
+use_collision = true
+radius = 0.6
+height = 4.0
+sides = 16
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="PillarB" type="CSGCylinder3D" parent="Obstacles" unique_id=297846086]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2.6, 14)
+use_collision = true
+radius = 0.4
+height = 5.2
+sides = 16
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="Disc" type="CSGCylinder3D" parent="Obstacles" unique_id=436780532]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.2, -32)
+use_collision = true
+radius = 3.0
+height = 0.4
+sides = 24
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="Cone" type="CSGCylinder3D" parent="Obstacles" unique_id=1263890230]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 1.6, 20)
+use_collision = true
+radius = 2.4
+height = 3.2
+sides = 16
+cone = true
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="SphereA" type="CSGSphere3D" parent="Obstacles" unique_id=1121835272]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 1.2, 28)
+use_collision = true
+radius = 1.2
+radial_segments = 24
+rings = 12
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="SphereB" type="CSGSphere3D" parent="Obstacles" unique_id=506727938]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.7, 36)
+use_collision = true
+radius = 0.7
+radial_segments = 24
+rings = 12
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="SphereC" type="CSGSphere3D" parent="Obstacles" unique_id=1631934263]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36, 1.6, 4)
+use_collision = true
+radius = 1.6
+radial_segments = 32
+rings = 12
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="Torus" type="CSGTorus3D" parent="Obstacles" unique_id=300538854]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0.7, 30)
+use_collision = true
+inner_radius = 1.1
+outer_radius = 2.4
+sides = 24
+ring_sides = 12
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="TorusUpright" type="CSGTorus3D" parent="Obstacles" unique_id=1264259045]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 6, 2.2, 4)
+use_collision = true
+inner_radius = 1.3
+outer_radius = 2.6
+sides = 24
+ring_sides = 12
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="Tunnels" type="Node3D" parent="." unique_id=1522029412]
+
+[node name="StraightTunnel" type="CSGCombiner3D" parent="Tunnels" unique_id=452735768]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -12)
+use_collision = true
+
+[node name="Outer" type="CSGBox3D" parent="Tunnels/StraightTunnel" unique_id=1106533719]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+size = Vector3(4, 3.6, 14)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="Inner" type="CSGBox3D" parent="Tunnels/StraightTunnel" unique_id=2079292526]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+operation = 2
+size = Vector3(3.2, 3.4, 15)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="WideTunnel" type="CSGCombiner3D" parent="Tunnels" unique_id=100629593]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 14)
+use_collision = true
+
+[node name="Outer" type="CSGBox3D" parent="Tunnels/WideTunnel" unique_id=703555767]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+size = Vector3(5.2, 4.2, 12)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="Inner" type="CSGBox3D" parent="Tunnels/WideTunnel" unique_id=587039952]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+operation = 2
+size = Vector3(4.4, 4, 13)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="LowTunnel" type="CSGCombiner3D" parent="Tunnels" unique_id=454691887]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -16, 0, 8)
+use_collision = true
+
+[node name="Outer" type="CSGBox3D" parent="Tunnels/LowTunnel" unique_id=323929573]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, 0)
+size = Vector3(3.2, 2.7, 10)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="Inner" type="CSGBox3D" parent="Tunnels/LowTunnel" unique_id=1829007930]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0)
+operation = 2
+size = Vector3(2.5, 2.6, 11)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="CurvedTunnelPath" type="Path3D" parent="Tunnels" unique_id=1484965495]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32, 0, -6)
+curve = SubResource("Curve3D_tunnel")
+
+[node name="CurvedTunnel" type="CSGPolygon3D" parent="Tunnels/CurvedTunnelPath" unique_id=523793682]
+use_collision = true
+polygon = PackedVector2Array(-1.85, 0, -1.5, 0, -1.5, 3.3, 1.5, 3.3, 1.5, 0, 1.85, 0, 1.85, 3.6, -1.85, 3.6)
+mode = 2
+path_node = NodePath("..")
+path_interval_type = 0
+path_interval = 0.5
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = true
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="WallrunZone" type="Node3D" parent="." unique_id=2020010776]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, -6)
+
+[node name="LeanLeft" type="CSGBox3D" parent="WallrunZone" unique_id=1025245685]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.35, 1.75, -10)
+use_collision = true
+size = Vector3(0.5, 3.5, 14)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="LeanRight" type="CSGBox3D" parent="WallrunZone" unique_id=2121676636]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35, 1.75, -10)
+use_collision = true
+size = Vector3(0.5, 3.5, 14)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="LeanCorner" type="CSGBox3D" parent="WallrunZone" unique_id=1870587786]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 1.75, -16.75)
+use_collision = true
+size = Vector3(5, 3.5, 0.5)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="LaneALeft" type="CSGBox3D" parent="WallrunZone" unique_id=1744667921]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 4.75, 4)
+use_collision = true
+size = Vector3(1, 9.5, 22)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="LaneMid" type="CSGBox3D" parent="WallrunZone" unique_id=254266267]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.2, 4.75, 4)
+use_collision = true
+size = Vector3(1, 9.5, 22)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="LaneBRight" type="CSGBox3D" parent="WallrunZone" unique_id=1209571031]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.4, 4.75, 4)
+use_collision = true
+size = Vector3(1, 9.5, 22)
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="CurveInner" type="Path3D" parent="WallrunZone" unique_id=1017931880]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 18)
+curve = SubResource("Curve3D_wallrun")
+
+[node name="Wall" type="CSGPolygon3D" parent="WallrunZone/CurveInner" unique_id=365498443]
+use_collision = true
+polygon = PackedVector2Array(0, 0, 0, 9.525, 1, 9.525, 1, 0)
+mode = 2
+path_node = NodePath("..")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = true
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="CurveMid" type="Path3D" parent="WallrunZone" unique_id=159426243]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.2, 0, 18)
+curve = SubResource("Curve3D_wallrun")
+
+[node name="Wall" type="CSGPolygon3D" parent="WallrunZone/CurveMid" unique_id=2089557329]
+use_collision = true
+polygon = PackedVector2Array(0, 0, 0, 9.525, 1, 9.525, 1, 0)
+mode = 2
+path_node = NodePath("..")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = true
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+material = SubResource("StandardMaterial3D_4hjbm")
+
+[node name="CurveOuter" type="Path3D" parent="WallrunZone" unique_id=546932879]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.4, 0, 18)
+curve = SubResource("Curve3D_wallrun")
+
+[node name="Wall" type="CSGPolygon3D" parent="WallrunZone/CurveOuter" unique_id=667942532]
+use_collision = true
+polygon = PackedVector2Array(0, 0, 0, 9.525, 1, 9.525, 1, 0)
+mode = 2
+path_node = NodePath("..")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = true
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+material = SubResource("StandardMaterial3D_4hjbm")

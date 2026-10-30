@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="RobotDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/automation/robot_definition.gd" id="1_robot"]
+
+[resource]
+script = ExtResource("1_robot")
+id = &"robot_tractor"
+display_name = "Aspirador industrial"
+description = "Aspirador robô de galpão, do tamanho de uma mesa. Esvazia praças e estacionamentos enquanto você trabalha em outro lugar."
+price_cents = 9000000
+requires = Array[StringName]([&"robot_small", &"permit_commercial"])
+required_value_cents = 17000000
+rate = 85.0
+radius = 16.0
+units = 8
+price_growth = 1.3
+body_color = Color(0.95, 0.45, 0.1, 1)
+visual_scale = 2.0
+move_speed = 2.5

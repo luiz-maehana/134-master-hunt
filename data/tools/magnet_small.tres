@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ToolDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/tools/tool_definition.gd" id="1_def"]
+[ext_resource type="PackedScene" path="res://scenes/tools/magnet_tool.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"magnet_small"
+display_name = "Ímã pequeno"
+description = "Ímã de geladeira turbinado. Puxa as moedas à sua frente sem precisar abaixar."
+price_cents = 40000
+requires = Array[StringName]([])
+required_value_cents = 50000
+kind = 2
+slot_group = &"magnet"
+reach = 4.0
+use_time = 1.2
+area_radius = 0.0
+capacity = 500
+power = 4.0
+scene = ExtResource("2_scene")
+visual_scale = 0.8

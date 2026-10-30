@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/shop/upgrade_definition.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+id = &"flashlight"
+display_name = "Lanterna de bolso"
+description = "Lanterna de pilha, das baratas. À noite as moedas brilham no facho de luz."
+price_cents = 3000
+requires = Array[StringName]([])
+required_value_cents = 0
+effect = 5
+amount = 14.0
+tool_group = &""
+tool_stat_bonus = {}

@@ -1,0 +1,35 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/world/city.tscn" id="1_city"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="3_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="4_pause"]
+[ext_resource type="PackedScene" path="res://scenes/ui/shop_menu.tscn" id="5_shop"]
+[ext_resource type="PackedScene" path="res://scenes/ui/inventory_menu.tscn" id="6_inventory"]
+[ext_resource type="Script" path="res://scripts/world/main.gd" id="8_main"]
+[ext_resource type="Script" path="res://scripts/automation/robot_fleet.gd" id="9_fleet"]
+
+[node name="Main" type="Node3D" node_paths=PackedStringArray("city", "coin_world", "player")]
+script = ExtResource("8_main")
+city = NodePath("City")
+coin_world = NodePath("City/CoinWorld")
+player = NodePath("Player")
+
+[node name="City" parent="." instance=ExtResource("1_city")]
+
+[node name="RobotFleet" type="Node3D" parent="." node_paths=PackedStringArray("player")]
+script = ExtResource("9_fleet")
+player = NodePath("../Player")
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="HUD" parent="." node_paths=PackedStringArray("tool_user") instance=ExtResource("3_hud")]
+tool_user = NodePath("../Player/Head/Camera3D/ToolHolder")
+
+[node name="PauseMenu" parent="." instance=ExtResource("4_pause")]
+
+[node name="ShopMenu" parent="." instance=ExtResource("5_shop")]
+
+[node name="InventoryMenu" parent="." node_paths=PackedStringArray("tool_user") instance=ExtResource("6_inventory")]
+tool_user = NodePath("../Player/Head/Camera3D/ToolHolder")

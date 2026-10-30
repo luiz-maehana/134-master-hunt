@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ToolCatalog" format=3]
+
+[ext_resource type="Script" path="res://scripts/tools/tool_catalog.gd" id="1_catalog"]
+[ext_resource type="Script" path="res://scripts/tools/tool_definition.gd" id="2_def"]
+[ext_resource type="Resource" path="res://data/tools/hands.tres" id="3_hands"]
+[ext_resource type="Resource" path="res://data/tools/glove.tres" id="4_glove"]
+[ext_resource type="Resource" path="res://data/tools/big_glove.tres" id="5_big_glove"]
+[ext_resource type="Resource" path="res://data/tools/shovel_small.tres" id="6_shovel_small"]
+[ext_resource type="Resource" path="res://data/tools/shovel_medium.tres" id="7_shovel_medium"]
+[ext_resource type="Resource" path="res://data/tools/shovel_large.tres" id="8_shovel_large"]
+[ext_resource type="Resource" path="res://data/tools/magnet_small.tres" id="9_magnet_small"]
+[ext_resource type="Resource" path="res://data/tools/magnet_medium.tres" id="10_magnet_medium"]
+[ext_resource type="Resource" path="res://data/tools/magnet_large.tres" id="11_magnet_large"]
+[ext_resource type="Resource" path="res://data/tools/magnet_neodymium.tres" id="15_magnet_neodymium"]
+[ext_resource type="Resource" path="res://data/tools/magnet_rod_small.tres" id="12_rod_small"]
+[ext_resource type="Resource" path="res://data/tools/magnet_rod_medium.tres" id="13_rod_medium"]
+[ext_resource type="Resource" path="res://data/tools/magnet_rod_large.tres" id="14_rod_large"]
+
+[resource]
+script = ExtResource("1_catalog")
+tools = Array[ExtResource("2_def")]([ExtResource("3_hands"), ExtResource("4_glove"), ExtResource("5_big_glove"), ExtResource("6_shovel_small"), ExtResource("7_shovel_medium"), ExtResource("8_shovel_large"), ExtResource("9_magnet_small"), ExtResource("10_magnet_medium"), ExtResource("11_magnet_large"), ExtResource("15_magnet_neodymium"), ExtResource("12_rod_small"), ExtResource("13_rod_medium"), ExtResource("14_rod_large")])

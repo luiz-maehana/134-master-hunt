@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/shop/upgrade_definition.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+id = &"permit_commercial"
+display_name = "Licença: Esplanada dos Ministérios"
+description = "Libera a Esplanada dos Ministérios: o gramado do eixo e os ministérios, cheios de moedas de 50 centavos e de R$ 1."
+price_cents = 200000
+required_value_cents = 800000
+effect = 3
+district_id = &"commercial"

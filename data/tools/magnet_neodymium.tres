@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ToolDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/tools/tool_definition.gd" id="1_def"]
+[ext_resource type="PackedScene" path="res://scenes/tools/neodymium_magnet_tool.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"magnet_neodymium"
+display_name = "Ímã de neodímio"
+description = "Terra rara de verdade. Basta andar: puxa sozinho tudo o que estiver em volta, sem clicar."
+price_cents = 220000000
+requires = Array[StringName]([&"magnet_large"])
+required_value_cents = 250000000
+kind = 2
+slot_group = &"magnet"
+reach = 16.0
+use_time = 0.4
+area_radius = 0.0
+capacity = 4000
+power = 12.0
+passive = true
+scene = ExtResource("2_scene")
+visual_scale = 1.0

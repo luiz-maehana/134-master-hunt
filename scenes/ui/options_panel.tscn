@@ -1,0 +1,154 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/options_panel.gd" id="1_options"]
+[ext_resource type="Script" path="res://scripts/ui/controls_panel.gd" id="2_controls"]
+
+[node name="Options" type="TabContainer"]
+script = ExtResource("1_options")
+custom_minimum_size = Vector2(0, 470)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+current_tab = 0
+
+[node name="Controles" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 16
+script = ExtResource("2_controls")
+metadata/_tab_index = 0
+
+[node name="SensitivityLabel" type="Label" parent="Controles"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Sensibilidade do mouse: 1,00x"
+
+[node name="Sensitivity" type="HSlider" parent="Controles"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+min_value = 0.2
+max_value = 3.0
+step = 0.05
+value = 1.0
+
+[node name="Presets" type="HBoxContainer" parent="Controles"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Default" type="Button" parent="Controles/Presets"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Teclas padrão (WASD)"
+
+[node name="LeftHanded" type="Button" parent="Controles/Presets"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Canhoto (setas + teclado numérico)"
+
+[node name="RemapHint" type="Label" parent="Controles"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
+theme_override_font_sizes/font_size = 17
+text = "Clique numa ação e aperte a nova tecla ou botão do mouse. Esc cancela."
+autowrap_mode = 3
+
+[node name="Scroll" type="ScrollContainer" parent="Controles"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Bindings" type="VBoxContainer" parent="Controles/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Vídeo" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 16
+metadata/_tab_index = 1
+
+[node name="Fullscreen" type="CheckButton" parent="Vídeo"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Tela cheia"
+
+[node name="AntialiasRow" type="HBoxContainer" parent="Vídeo"]
+layout_mode = 2
+
+[node name="AntialiasLabel" type="Label" parent="Vídeo/AntialiasRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+text = "Antialiasing"
+
+[node name="Antialias" type="OptionButton" parent="Vídeo/AntialiasRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+
+[node name="QualityRow" type="HBoxContainer" parent="Vídeo"]
+layout_mode = 2
+
+[node name="QualityLabel" type="Label" parent="Vídeo/QualityRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+text = "Efeitos (sombras, brilho)"
+
+[node name="Quality" type="OptionButton" parent="Vídeo/QualityRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+
+[node name="UiScaleLabel" type="Label" parent="Vídeo"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Tamanho da interface: 100%"
+
+[node name="UiScale" type="HSlider" parent="Vídeo"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+min_value = 0.8
+max_value = 1.3
+step = 0.05
+value = 1.0
+
+[node name="QualityHint" type="Label" parent="Vídeo"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
+theme_override_font_sizes/font_size = 17
+text = "Predefinição ajusta tudo de uma vez. O que mais pesa: detalhe das moedas, distância de visão e resolução 3D (abaixo de 100% usa AMD FSR 2 para manter a imagem nítida)."
+autowrap_mode = 3
+
+[node name="Áudio" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 16
+metadata/_tab_index = 2
+
+[node name="VolumeLabel" type="Label" parent="Áudio"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Volume: 80%"
+
+[node name="Volume" type="HSlider" parent="Áudio"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.8

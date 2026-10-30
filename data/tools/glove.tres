@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ToolDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/tools/tool_definition.gd" id="1_def"]
+[ext_resource type="PackedScene" path="res://scenes/tools/hands_tool.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"glove"
+display_name = "Luva de trabalho"
+description = "Luva amarela de borracha. Pega um punhado de moedas de cada vez."
+price_cents = 100
+requires = Array[StringName]([])
+kind = 0
+slot_group = &"hands"
+reach = 2.2
+use_time = 0.4
+area_radius = 0.35
+capacity = 10
+power = 0.0
+scene = ExtResource("2_scene")
+tint = Color(0.95, 0.75, 0.15, 1)
+visual_scale = 1.05

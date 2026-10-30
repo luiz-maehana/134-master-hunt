@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/shop/upgrade_definition.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+id = &"portal_contract"
+display_name = "Contrato dos portais"
+description = "Assinatura mensal da Rede de Portais do Planalto. Entre num portal ao lado de qualquer loja e saia em outra, do outro lado do eixo."
+price_cents = 500000
+requires = Array[StringName]([&"permit_downtown"])
+required_value_cents = 1000000
+effect = 6
+amount = 0.0
+tool_group = &""
+tool_stat_bonus = {}

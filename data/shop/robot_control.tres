@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/shop/upgrade_definition.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+id = &"robot_control"
+display_name = "Central de operações"
+description = "Sala de controle que coordena a frota inteira. Todos os robôs rendem o dobro."
+price_cents = 1800000000
+requires = Array[StringName]([&"robot_truck"])
+required_value_cents = 1900000000
+effect = 4
+amount = 1.0
+tool_group = &""
+tool_stat_bonus = {}
