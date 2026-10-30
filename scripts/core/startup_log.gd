@@ -8,7 +8,7 @@ static var _last := 0
 
 
 static func mark(step: String) -> void:
-	if not OS.has_feature("web"):
+	if not WebPlatform.active():
 		return
 	var now := Time.get_ticks_msec()
 	print("[carga] %s: %d ms (t=%.1f s)" % [step, now - _last if _last > 0 else 0, now / 1000.0])

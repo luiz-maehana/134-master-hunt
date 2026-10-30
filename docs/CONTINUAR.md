@@ -82,6 +82,7 @@ Também feito depois da spec:
 - [x] Mais detalhes: 18 pontos de ônibus nas avenidas, 89 hidrantes nas calçadas, metade das floreiras florida. Assinatura do mundo igual.
 - [x] Menos chamadas de desenho: peças dos marcos juntadas por material (`LandmarkBuilder._merge_meshes`), detalhes das lojas e portais com distância de exibição (`HUB_VISIBLE`, `WARES_VISIBLE`), sem sombra para coisas rentes ao chão (`NO_SHADOW`). Rodoviária 1.026 → ~330 chamadas; CPU de desenho ~2 → ~1 ms.
 - [x] Versão web e repositório público: https://github.com/luiz-maehana/134-master-hunt (commits com o e-mail privado do GitHub). Preset "Web" (Compatibility, sem threads), padrões leves no navegador (`Settings._web_defaults`), sem FSR 2 e sem botão Sair na web, blocos dos robôs gerados sem thread quando não há threads. `.github/workflows/build.yml`: testes → `check_publish.sh` → export Web → teste no navegador (`tests/web_smoke.js`, Playwright) → GitHub Pages (https://luiz-maehana.github.io/134-master-hunt/).
+- [x] Web sem "página travada": o primeiro quadro compilava todos os shaders de uma vez (~34 s no Chrome). Agora `ShaderWarmup` mostra a cidade por tipo de objeto atrás da tela de carregamento, com uma câmera alta que enquadra tudo, e na web o asfalto e o concreto são lisos (o triplanar custava ~6 s). Linha do tempo `[carga]` no console do navegador (`StartupLog`).
 - [x] Segredos satíricos (`CityEasterEggs`, tudo fictício, nenhum nome real; fora do sorteio das moedas): moeda lendária ao pé do mastro, jornais que mudam de manchete em cada ponto de coleta, cartazes de 5 partidos inventados nos muros, urna das promessas (Esplanada), cartaz "Dark Horse: The Untold Budget" com máquina de pipoca de 1 centavo (muro norte do Setor Cultural), Senhor V. (banqueiro evasivo que muda de beco), final secreto da prancheta. 7 conquistas (`Achievements`, salvas em `GameState.extras`, lista no inventário). Segundo lote (`EscapeEasterEggs`, peças comuns em `EasterEggKit`): aeroporto "A Última Saída" (muro sul, Praça), fuga com esconderijo de malas (muro norte, Praça), Banco Central de Tudo (muro norte, Esplanada), Produções Milionárias (muro norte, Setor Cultural). Ímã de emendas: descartado pelo jogador. 11 conquistas.
 
 ### Para o jogador conferir jogando
@@ -104,6 +105,7 @@ Também feito depois da spec:
   - `tools/ui_screenshots.gd`: capturas de todas as telas em várias resoluções.
   - `tools/benchmark.gd`: gera `docs/BENCHMARK.md`.
   - `tools/layout_plan.gd`: planta 2D do traçado (ruas, lotes, marcos, postes) para revisar a cidade.
+  - `tools/web_load_check.gd`: mede o carregamento da versão web no PC (ANGLE + `--simular-web`).
   - `tools/check_publish.sh`: varredura antes de publicar.
   - `tests/balance_report.gd`: gera o relatório de `docs/BALANCE.md`.
   - `tools/build_*`: tema, ícones e texturas.

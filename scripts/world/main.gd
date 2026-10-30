@@ -38,7 +38,11 @@ func _ready() -> void:
 	if DisplayServer.get_name() == "headless":
 		coin_world.load_around(spawn)
 	else:
-		LoadingScreen.show_on(get_tree()).track(coin_world)
+		var screen := LoadingScreen.show_on(get_tree())
+		# Na web os shaders são compilados aos poucos antes (ver ShaderWarmup).
+		if WebPlatform.active():
+			await screen.warm_up(city)
+		screen.track(coin_world)
 		coin_world.load_around_async(spawn)
 
 

@@ -51,6 +51,14 @@ func track(world: CoinWorld) -> void:
 	world.loading_finished.connect(_finish, CONNECT_ONE_SHOT)
 
 
+## Versão web: compila os shaders da cidade aos poucos (ShaderWarmup), com a barra andando.
+func warm_up(city: Node3D) -> void:
+	if not is_node_ready():
+		await ready
+	set_step("Preparando os gráficos…", 0.45)
+	await ShaderWarmup.run(city, func(fraction: float) -> void: _bar.value = 0.45 + 0.15 * fraction)
+
+
 func set_step(text: String, value: float) -> void:
 	if _status != null:
 		_status.text = text

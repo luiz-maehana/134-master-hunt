@@ -8,6 +8,10 @@ extends Node3D
 
 const ASPHALT_MATERIAL := preload("res://assets/textures/city/asphalt_material.tres")
 const CONCRETE_MATERIAL := preload("res://assets/textures/city/concrete_material.tres")
+## Na web (WebGL) o asfalto e o concreto triplanares com relevo custam ~6 s de compilação de
+## shader no primeiro quadro; lá eles viram cor lisa (o mesmo shader das peças simples).
+const WEB_ASPHALT := Color(0.34, 0.3, 0.28)
+const WEB_CONCRETE := Color(0.47, 0.45, 0.43)
 const DEPOSIT_SCENE := preload("res://scenes/world/deposit_point.tscn")
 const KIOSK_SCENE := preload("res://scenes/world/shop_kiosk.tscn")
 const BUILDING_SHADER := preload("res://assets/shaders/building.gdshader")
@@ -67,6 +71,8 @@ var fences := {}
 var _block_bodies := {}
 ## Fachadas (o ciclo de dia e noite acende as janelas) e postes (onde ficam as luzes).
 var building_material: ShaderMaterial
+var _asphalt: Material = ASPHALT_MATERIAL
+var _concrete: Material = CONCRETE_MATERIAL
 var lamp_transforms: Array[Transform3D] = []
 
 
@@ -76,6 +82,9 @@ func _ready() -> void:
 	StartupLog.mark("cidade: início")
 	layout = CityLayout.for_definition(definition)
 	StartupLog.mark("cidade: traçado")
+	if WebPlatform.active():
+		_asphalt = _flat(WEB_ASPHALT)
+		_concrete = _flat(WEB_CONCRETE)
 	_build_ground()
 	_build_blocks()
 	StartupLog.mark("cidade: quarteirões")
@@ -150,7 +159,7 @@ func _build_ground() -> void:
 	var size := Vector3(definition.world_size_x(), 0.2, definition.world_size_z())
 	var mesh := BoxMesh.new()
 	mesh.size = size
-	mesh.material = ASPHALT_MATERIAL
+	mesh.material = _asphalt
 	var ground := MeshInstance3D.new()
 	ground.name = "Ground"
 	ground.mesh = mesh
@@ -160,12 +169,12 @@ func _build_ground() -> void:
 
 
 ## Piso de cada lote: concreto nos quarteirões comuns, grama na Esplanada, pedra na Praça.
-static func _ground_materials() -> Dictionary:
+func _ground_materials() -> Dictionary:
 	var lawn := ShaderMaterial.new()
 	lawn.shader = LAWN_SHADER
-	var paved := CONCRETE_MATERIAL.duplicate() as StandardMaterial3D
-	paved.albedo_color = Color(0.92, 0.9, 0.84)
-	return {&"concrete": CONCRETE_MATERIAL, &"lawn": lawn, &"paved": paved}
+	var paved := _concrete.duplicate() as StandardMaterial3D
+	paved.albedo_color = paved.albedo_color * Color(0.92, 0.9, 0.84) if WebPlatform.active() else Color(0.92, 0.9, 0.84)
+	return {&"concrete": _concrete, &"lawn": lawn, &"paved": paved}
 
 
 func _surface_of(key: Vector2i) -> StringName:
@@ -228,6 +237,14 @@ func _build_blocks() -> void:
 	_multimesh("Roofs", _box_mesh(Color(0.25, 0.24, 0.24), 1.0), roof_transforms)
 	_multimesh("RoofUnits", _box_mesh(Color(0.7, 0.71, 0.72), 0.6), units)
 	_multimesh("WaterTanks", _tank_mesh(), tanks)
+
+
+## Material liso (sem textura): o shader mais barato de compilar.
+static func _flat(color: Color) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = color
+	material.roughness = 0.95
+	return material
 
 
 ## Caixa unitária (escalada por instância) com cor chapada.
@@ -568,7 +585,7 @@ func _build_edges() -> void:
 	for i in walls.size():
 		var mesh := BoxMesh.new()
 		mesh.size = walls[i][1]
-		mesh.material = CONCRETE_MATERIAL
+		mesh.material = _concrete
 		var wall := MeshInstance3D.new()
 		wall.mesh = mesh
 		wall.position = walls[i][0]
@@ -746,7 +763,7 @@ func _build_backdrop() -> void:
 	var ground := MeshInstance3D.new()
 	var plane := BoxMesh.new()
 	plane.size = Vector3(size_x, 0.2, definition.world_size_z() + depth * 2.0)
-	plane.material = ASPHALT_MATERIAL
+	plane.material = _asphalt
 	ground.mesh = plane
 	ground.position.y = -0.12
 	add_child(ground)
