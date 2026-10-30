@@ -55,10 +55,32 @@ static func run(city: Node3D, progress: Callable) -> void:
 		environment.ambient_light_color = Color(0.6, 0.62, 0.68)
 		environment.background_color = Color(0.55, 0.62, 0.75)
 		groups["céu"] = []
+		# Efeitos de tela também têm shaders próprios: começam desligados e voltam numa etapa.
+		var effects := [environment.glow_enabled, environment.fog_enabled, environment.tonemap_mode]
+		environment.glow_enabled = false
+		environment.fog_enabled = false
+		environment.tonemap_mode = Environment.TONE_MAPPER_LINEAR
+		groups["efeitos de tela"] = effects
+	# Interface do jogo (HUD e menus): escondida até a etapa dela.
+	var layers: Array = []
+	for sibling in city.get_parent().get_children():
+		if sibling is CanvasLayer and (sibling as CanvasLayer).visible:
+			(sibling as CanvasLayer).visible = false
+			layers.append(sibling)
+	groups["interface"] = layers
 	var step := 0
 	for kind: String in groups:
-		for node: Node3D in groups[kind]:
-			node.visible = true
+		if kind == "efeitos de tela":
+			var effects: Array = groups[kind]
+			environment.glow_enabled = effects[0]
+			environment.fog_enabled = effects[1]
+			environment.tonemap_mode = effects[2]
+		elif kind == "interface":
+			for layer: CanvasLayer in groups[kind]:
+				layer.visible = true
+		else:
+			for node: Node3D in groups[kind]:
+				node.visible = true
 		if kind == "céu":
 			environment.background_mode = background
 			environment.ambient_light_source = ambient
