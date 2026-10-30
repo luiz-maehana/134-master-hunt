@@ -21,6 +21,7 @@ const TREE_SCENE := "res://assets/third_party/kenney/city-kit-suburban/tree-larg
 const SMALL_TREE_SCENE := "res://assets/third_party/kenney/city-kit-suburban/tree-small.glb"
 const TREE_COLORMAP := "res://assets/third_party/kenney/city-kit-suburban/Textures/colormap.png"
 const TREE_TINT_SHADER := preload("res://assets/shaders/tree_tint.gdshader")
+const WEB_GROUND_SHADER := preload("res://assets/shaders/web_ground.gdshader")
 ## Ipês (a cara de Brasília): fração das árvores e as cores da copa (amarelo, roxo, branco).
 const IPE_SHARE := 22
 const IPE_COLORS := [Color(1.0, 0.8, 0.12), Color(0.86, 0.36, 0.72), Color(0.96, 0.94, 0.9)]
@@ -84,8 +85,8 @@ func _ready() -> void:
 	layout = CityLayout.for_definition(definition)
 	StartupLog.mark("cidade: traçado")
 	if WebPlatform.active():
-		_asphalt = _flat(WEB_ASPHALT)
-		_concrete = _flat(WEB_CONCRETE)
+		_asphalt = _web_ground(WEB_ASPHALT)
+		_concrete = _web_ground(WEB_CONCRETE)
 	_build_ground()
 	_build_blocks()
 	StartupLog.mark("cidade: quarteirões")
@@ -174,12 +175,16 @@ func _ground_materials() -> Dictionary:
 	var lawn: Material
 	if WebPlatform.active():
 		# Na web o gramado listrado (shader próprio, ~3 s de compilação) vira grama lisa.
-		lawn = _flat(WEB_LAWN)
+		lawn = _web_ground(WEB_LAWN)
 	else:
 		lawn = ShaderMaterial.new()
 		(lawn as ShaderMaterial).shader = LAWN_SHADER
-	var paved := _concrete.duplicate() as StandardMaterial3D
-	paved.albedo_color = paved.albedo_color * Color(0.92, 0.9, 0.84) if WebPlatform.active() else Color(0.92, 0.9, 0.84)
+	var paved: Material
+	if WebPlatform.active():
+		paved = _web_ground(WEB_CONCRETE * Color(0.92, 0.9, 0.84))
+	else:
+		paved = _concrete.duplicate()
+		(paved as StandardMaterial3D).albedo_color = Color(0.92, 0.9, 0.84)
 	return {&"concrete": _concrete, &"lawn": lawn, &"paved": paved}
 
 
@@ -245,11 +250,11 @@ func _build_blocks() -> void:
 	_multimesh("WaterTanks", _tank_mesh(), tanks)
 
 
-## Material liso (sem textura): o shader mais barato de compilar.
-static func _flat(color: Color) -> StandardMaterial3D:
-	var material := StandardMaterial3D.new()
-	material.albedo_color = color
-	material.roughness = 0.95
+## Chão da web: cor lisa e a mancha da lanterna (web_ground.gdshader; lá não há luz de verdade).
+static func _web_ground(color: Color) -> ShaderMaterial:
+	var material := ShaderMaterial.new()
+	material.shader = WEB_GROUND_SHADER
+	material.set_shader_parameter(&"albedo", color)
 	return material
 
 

@@ -174,3 +174,26 @@ gdscript/warnings/untyped_declaration=1
 gdscript/warnings/inferred_declaration=0
 gdscript/warnings/unsafe_property_access=0
 gdscript/warnings/return_value_discarded=0
+
+[shader_globals]
+
+flash_light={
+"type": "float",
+"value": 0.0
+}
+flash_light_pos={
+"type": "vec3",
+"value": Vector3(0, 0, 0)
+}
+flash_light_dir={
+"type": "vec3",
+"value": Vector3(0, 0, -1)
+}
+flash_light_cos={
+"type": "float",
+"value": 0.9
+}
+flash_light_range={
+"type": "float",
+"value": 1.0
+}

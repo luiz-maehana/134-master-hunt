@@ -6,7 +6,8 @@ extends SpotLight3D
 ##
 ## Na web a luz em si fica apagada: cada luz nova no WebGL obriga a compilar variações de
 ## shader de todos os materiais na tela (segundos de trava). Lá a lanterna "ligada" mantém o
-## que importa para jogar: as moedas brilhando no facho (shader das moedas).
+## que importa para jogar: as moedas brilhando no facho (shader das moedas) e a mancha de luz
+## no chão (shader do chão da web, web_ground.gdshader).
 
 ## Ligada pelo jogador (ou pela noite). A luz só aparece fora da web.
 var on := false:
@@ -55,12 +56,25 @@ func _update_coin_glint(cycle: DayNight) -> void:
 	var darkness := 1.0 - cycle.daylight if cycle != null else 0.0
 	var glint := darkness if on and is_inside_tree() else 0.0
 	material.set_shader_parameter(&"flash_glint", glint)
+	if WebPlatform.active():
+		_update_web_ground(glint)
 	if glint <= 0.0:
 		return
 	material.set_shader_parameter(&"flash_pos", global_position)
 	material.set_shader_parameter(&"flash_dir", -global_basis.z)
 	material.set_shader_parameter(&"flash_cos", cos(deg_to_rad(spot_angle)))
 	material.set_shader_parameter(&"flash_range", spot_range)
+
+
+## Web: a mancha de luz no chão (web_ground.gdshader), já que lá não há luz de verdade.
+func _update_web_ground(strength: float) -> void:
+	RenderingServer.global_shader_parameter_set(&"flash_light", strength)
+	if strength <= 0.0:
+		return
+	RenderingServer.global_shader_parameter_set(&"flash_light_pos", global_position)
+	RenderingServer.global_shader_parameter_set(&"flash_light_dir", -global_basis.z)
+	RenderingServer.global_shader_parameter_set(&"flash_light_cos", cos(deg_to_rad(spot_angle)))
+	RenderingServer.global_shader_parameter_set(&"flash_light_range", spot_range)
 
 
 func _unhandled_input(event: InputEvent) -> void:
