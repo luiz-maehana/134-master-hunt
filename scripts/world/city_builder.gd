@@ -73,11 +73,16 @@ var lamp_transforms: Array[Transform3D] = []
 func _ready() -> void:
 	if definition == null:
 		definition = WorldDefinition.get_default()
+	StartupLog.mark("cidade: início")
 	layout = CityLayout.for_definition(definition)
+	StartupLog.mark("cidade: traçado")
 	_build_ground()
 	_build_blocks()
+	StartupLog.mark("cidade: quarteirões")
 	LandmarkBuilder.build_all(self, layout, building_material)
+	StartupLog.mark("cidade: marcos")
 	_build_props()
+	StartupLog.mark("cidade: objetos de rua")
 	_build_road_markings()
 	# As formas já estão nos corpos; cada corpo entra na cena uma vez só.
 	for body: StaticBody3D in _block_bodies.values():
@@ -85,7 +90,9 @@ func _ready() -> void:
 	_build_edges()
 	_build_backdrop()
 	_build_fences()
+	StartupLog.mark("cidade: bordas e cercas")
 	_build_hubs()
+	StartupLog.mark("cidade: lojas e portais")
 	var easter_eggs := CityEasterEggs.new()
 	easter_eggs.name = "EasterEggs"
 	easter_eggs.setup(layout)
@@ -94,6 +101,7 @@ func _ready() -> void:
 	escape.name = "EscapeEasterEggs"
 	escape.setup(layout)
 	add_child(escape)
+	StartupLog.mark("cidade: segredos")
 	GameState.tools_changed.connect(_refresh_fences)
 	_refresh_fences()
 	Settings.changed.connect(_apply_quality)
@@ -102,6 +110,7 @@ func _ready() -> void:
 	day_night.name = "DayNight"
 	day_night.setup($Sun, ($WorldEnvironment as WorldEnvironment).environment, building_material, lamp_transforms)
 	add_child(day_night)
+	StartupLog.mark("cidade: dia e noite")
 
 
 ## Efeitos (aba Vídeo): Baixa tira SSAO e brilho e encurta as sombras; Média tira só o SSAO;

@@ -89,7 +89,9 @@ func _ready() -> void:
 	_chunks_x = _generator.chunks_x
 	_chunks_z = _generator.chunks_z
 	_cells_per_side = _generator.cells_per_side
+	StartupLog.mark("moedas: início")
 	var plan := _generator.allocate()
+	StartupLog.mark("moedas: fatias de todos os blocos")
 	_allocation = plan.allocation
 	_free_area = plan.free_area
 	_districts = DistrictTally.new(_chunks_x, plan.chunk_district, plan.district_totals)

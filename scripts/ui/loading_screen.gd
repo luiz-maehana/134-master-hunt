@@ -14,16 +14,21 @@ const TIPS := [
 	"Dica: à noite, as moedas brilham no facho da lanterna (F).",
 ]
 
+## Quadro acima disto entra na linha do tempo da versão web (StartupLog).
+const SLOW_FRAME_MS := 300
+
 static var current: LoadingScreen
 
 var _bar: ProgressBar
 var _status: Label
 var _path := ""
+var _last_frame := 0
 
 
 ## Troca para a cena `path` mostrando a tela de carregamento.
 static func change_to(tree: SceneTree, path: String) -> void:
 	var screen := show_on(tree)
+	StartupLog.mark("cena: pedido")
 	screen._path = path
 	ResourceLoader.load_threaded_request(path)
 
@@ -91,6 +96,11 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	# Versão web: quadros que seguraram a página (compilar shaders, enviar malhas...).
+	var now := Time.get_ticks_msec()
+	if _last_frame > 0 and now - _last_frame > SLOW_FRAME_MS:
+		StartupLog.mark("quadro lento (%d ms)" % (now - _last_frame))
+	_last_frame = now
 	if _path == "":
 		return
 	var progress := []
@@ -99,12 +109,14 @@ func _process(_delta: float) -> void:
 		set_step("Carregando…", 0.4 * float(progress[0]) if not progress.is_empty() else 0.0)
 	elif status == ResourceLoader.THREAD_LOAD_LOADED:
 		var scene := ResourceLoader.load_threaded_get(_path) as PackedScene
+		StartupLog.mark("cena: arquivo carregado")
 		_path = ""
 		set_step("Montando a Esplanada dos Ministérios…", 0.45)
 		# Dois quadros para a mensagem aparecer antes da montagem da cidade (que trava um pouco).
 		await get_tree().process_frame
 		await get_tree().process_frame
 		get_tree().change_scene_to_packed(scene)
+		StartupLog.mark("cena: montada")
 	else:
 		# Falhou: tenta do jeito comum (sem progresso).
 		var path := _path
@@ -113,6 +125,7 @@ func _process(_delta: float) -> void:
 
 
 func _finish() -> void:
+	StartupLog.mark("moedas em volta prontas")
 	_bar.value = 1.0
 	GameState.set_screen_open(false)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
