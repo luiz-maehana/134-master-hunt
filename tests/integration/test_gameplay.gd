@@ -163,14 +163,14 @@ func test_portals_travel_between_shops() -> void:
 	GameState.tools_changed.emit()
 
 
-func test_city_secrets() -> void:
-	var secrets := city.get_node("Secrets") as CitySecrets
+func test_easter_eggs() -> void:
+	var secrets := city.get_node("EasterEggs") as CityEasterEggs
 	var extras_before := GameState.extras.duplicate(true)
 	var money := GameState.ledger.money_cents
 	var use := func(node_name: String) -> void:
 		Interactable.find_on(secrets.get_node(node_name)).interact(player)
 	# Urna: dez votos liberam a conquista.
-	for i in CitySecrets.VOTES_FOR_LOOP:
+	for i in CityEasterEggs.VOTES_FOR_LOOP:
 		use.call("BallotBox")
 	check(GameState.has_achievement(&"democracy_loop"), "urna: Democracia em Loop após 10 votos")
 	# Jornal: a mesma pilha muda de manchete a cada leitura.
@@ -200,7 +200,7 @@ func test_city_secrets() -> void:
 	GameState.extras = {}
 	SaveSerializer.apply(GameState, copy)
 	check_eq(GameState.extras.get("achievements", []), achievements, "conquistas voltam do save")
-	check_eq(int(GameState.extras.get("votes", 0)), CitySecrets.VOTES_FOR_LOOP, "votos voltam do save")
+	check_eq(int(GameState.extras.get("votes", 0)), CityEasterEggs.VOTES_FOR_LOOP, "votos voltam do save")
 	GameState.extras = extras_before
 
 
